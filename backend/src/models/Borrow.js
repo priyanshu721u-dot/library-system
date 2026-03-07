@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-
 const borrowSchema = new mongoose.Schema({
     student: {
         type: mongoose.Schema.Types.ObjectId,

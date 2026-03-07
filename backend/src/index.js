@@ -4,6 +4,7 @@ const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const bookRoutes = require('./routes/bookRoutes');
 const borrowRoutes = require('./routes/borrowRoutes');
+const readingRoutes = require('./routes/readingRoutes');
 dotenv.config();
 
 connectDB();
@@ -15,7 +16,7 @@ app.use(express.json());
 app.use('/api/auth' , authRoutes);
 app.use('/api/books' , bookRoutes);
 app.use('/api/borrows', borrowRoutes);
-
+app.use('/api/reading', readingRoutes);
 
 app.get('/' , (req , res ) => {
     res.json({message: 'Library management api is working'})

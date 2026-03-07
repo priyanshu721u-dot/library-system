@@ -26,7 +26,7 @@ const borrowBook = async (req, res) => {
         const alreadyBorrowed = await Borrow.findOne({
             student: req.user._id,
             book: req.params.bookId,
-            status: { $in: ['pending', 'approved'] }
+            status: { $in: ['pending', 'approved'] }    //$in operator — checks if a value matches any item in an array
         });
         if (alreadyBorrowed) {
             return res.status(400).json({ message: 'You already have this book borrowed or requested' });
