@@ -6,7 +6,7 @@ const bookRoutes = require('./routes/bookRoutes');
 const borrowRoutes = require('./routes/borrowRoutes');
 const readingRoutes = require('./routes/readingRoutes');
 const wishlistRoutes = require('./routes/wishlistRoutes');
-
+const notificationRoutes = require('./routes/notificationRoutes');
 
 dotenv.config();
 
@@ -21,6 +21,7 @@ app.use('/api/books' , bookRoutes);
 app.use('/api/borrows', borrowRoutes);
 app.use('/api/reading', readingRoutes);
 app.use('/api/wishlist', wishlistRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 app.get('/' , (req , res ) => {
     res.json({message: 'Library management api is working'})

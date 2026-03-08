@@ -25,7 +25,7 @@ const readingSessionSchema = new mongoose.Schema({
     type:Number,
     required:[true , 'Current page is required'],
     min:0
-},
+    },
     date:{
         type:Date,
         default: () => new Date()

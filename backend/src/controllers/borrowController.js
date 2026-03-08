@@ -1,6 +1,7 @@
 const Borrow = require('../models/Borrow');
 const Book = require('../models/Book');
- 
+const Notification = require('../models/Notification');
+
 // Student requests to borrow a book
 const borrowBook = async (req, res) => {
     try {
@@ -67,6 +68,12 @@ const approveBorrow = async (req, res) => {
             $inc: { availableCopies: -1 }
         });
 
+        await Notification.create({
+            user: borrow.student,
+            type: 'borrow_approved',
+            message: `Your borrow request has been approved. Please collect your book within 2 days.`
+        });
+
         res.json({ message: 'Borrow request approved', borrow });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -88,6 +95,12 @@ const rejectBorrow = async (req, res) => {
         borrow.status = 'rejected';
         borrow.adminNote = req.body.adminNote || '';
         await borrow.save();
+
+        await Notification.create({
+            user: borrow.student,
+            type: 'borrow_rejected',
+            message: `Your borrow request has been rejected. ${borrow.adminNote ? 'Reason: ' + borrow.adminNote : ''}`
+        });
 
         res.json({ message: 'Borrow request rejected', borrow });
     } catch (error) {
@@ -157,6 +170,12 @@ const approveReturn = async (req, res) => {
                 $inc: { penalties: penalty }
             });
         }
+
+        await Notification.create({
+            user: borrow.student,
+            type: 'return_approved',
+            message: `Your return has been approved. ${penalty > 0 ? 'Penalty applied: ₹' + penalty : 'No penalty applied.'}`
+        });
 
         res.json({ message: 'Return approved successfully', borrow, penalty });
     } catch (error) {
