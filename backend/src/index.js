@@ -7,6 +7,8 @@ const borrowRoutes = require('./routes/borrowRoutes');
 const readingRoutes = require('./routes/readingRoutes');
 const wishlistRoutes = require('./routes/wishlistRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
+const blogRoutes = require('./routes/blogRoutes');
+
 
 dotenv.config();
 
@@ -22,6 +24,7 @@ app.use('/api/borrows', borrowRoutes);
 app.use('/api/reading', readingRoutes);
 app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/blogs', blogRoutes);
 
 app.get('/' , (req , res ) => {
     res.json({message: 'Library management api is working'})
