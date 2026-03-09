@@ -64,7 +64,7 @@ const getAdminStats = async (req , res) =>{
             .populate('student', 'username email')
             .sort({ createdAt: -1 })
             .limit(5);
-            
+
          res.json({
             totalBooks,
             totalStudents,
@@ -81,4 +81,19 @@ const getAdminStats = async (req , res) =>{
     }
 }
 
-module.exports = { getStudentStats, getAdminStats };
+// Leaderboard - top readers by reading hours
+const getLeaderboard = async (req, res) => {
+    try {
+        const leaderboard = await User.find({ role: 'student' })
+            .select('username totalReadingHours penalties')
+            .sort({ totalReadingHours: -1 })
+            .limit(10);
+
+        res.json(leaderboard);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+module.exports = { getStudentStats, getAdminStats,getLeaderboard  };
