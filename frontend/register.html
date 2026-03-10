@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReadON - Register</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/auth.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="auth-body">
+
+    <div class="auth-container">
+
+        <!-- LEFT SIDE -->
+        <div class="auth-left">
+            <div class="auth-left-content">
+               
+                <h1>Join ReadON Today!</h1>
+                <p>Create your account and start your reading journey. Access thousands of books and track your progress.</p>
+                <div class="auth-features">
+                    <div class="auth-feature-item">
+                        <i class="fas fa-user-plus"></i>
+                        <span>Free student registration</span>
+                    </div>
+                    <div class="auth-feature-item">
+                        <i class="fas fa-book"></i>
+                        <span>Borrow up to 3 books at once</span>
+                    </div>
+                    <div class="auth-feature-item">
+                        <i class="fas fa-trophy"></i>
+                        <span>Compete on the leaderboard</span>
+                    </div>
+                </div>
+                <div class="auth-left-illustration">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+            </div>
+            <div class="circle circle-1"></div>
+            <div class="circle circle-2"></div>
+            <div class="circle circle-3"></div>
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div class="auth-right">
+            <div class="auth-form-container">
+               
+                <h2>Create Account</h2>
+                <p class="auth-subtitle">Fill in your details to get started</p>
+
+                <div class="alert alert-error" id="error-msg" style="display:none;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="error-text"></span>
+                </div>
+
+                <div class="alert alert-success" id="success-msg" style="display:none;">
+                    <i class="fas fa-check-circle"></i>
+                    <span id="success-text"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Username</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="username" placeholder="Enter your username" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" placeholder="Enter your email" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" placeholder="Enter your password" />
+                        <i class="fas fa-eye toggle-password" id="togglePassword"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="confirmPassword" placeholder="Confirm your password" />
+                        <i class="fas fa-eye toggle-password" id="toggleConfirmPassword"></i>
+                    </div>
+                </div>
+
+                <button class="btn-submit" id="registerBtn">
+                    <span>Create Account</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+
+                <p class="auth-switch">
+                    Already have an account? <a href="login.html">Login here</a>
+                </p>
+
+                <a href="index.html" class="back-home">
+                    <i class="fas fa-arrow-left"></i> Back to Home
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/pages/register.js"></script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReadON - Login</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/auth.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="auth-body">
+
+    <div class="auth-container">
+
+        <!-- LEFT SIDE - Animated Blue Panel -->
+        <div class="auth-left">
+            <div class="auth-left-content">
+
+                <h1>Welcome Back!</h1>
+                <p>Login to access your library dashboard, track your reading progress and manage your borrowed books.
+                </p>
+                <div class="auth-features">
+                    <div class="auth-feature-item">
+                        <i class="fas fa-book-open"></i>
+                        <span>Access thousands of books</span>
+                    </div>
+                    <div class="auth-feature-item">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Track your reading progress</span>
+                    </div>
+                    <div class="auth-feature-item">
+                        <i class="fas fa-bell"></i>
+                        <span>Get notified on updates</span>
+                    </div>
+                </div>
+                <div class="auth-left-illustration">
+                    <i class="fas fa-book-reader"></i>
+                </div>
+            </div>
+            <!-- Floating circles decoration -->
+            <div class="circle circle-1"></div>
+            <div class="circle circle-2"></div>
+            <div class="circle circle-3"></div>
+        </div>
+
+        <!-- RIGHT SIDE - Login Form -->
+        <div class="auth-right">
+            <div class="auth-form-container">
+                <div class="auth-form-logo">
+                    <img src="assets/ReadON.png" alt="ReadON">
+                </div>
+                <h2>Login to ReadON</h2>
+                <p class="auth-subtitle">Enter your credentials to continue</p>
+
+                <!-- Error/Success messages -->
+                <div class="alert alert-error" id="error-msg" style="display:none;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="error-text"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" placeholder="Enter your email" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" placeholder="Enter your password" />
+                        <i class="fas fa-eye toggle-password" id="togglePassword"></i>
+                    </div>
+                </div>
+
+                <button class="btn-submit" id="loginBtn">
+                    <span>Login</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+
+                <p class="auth-switch">
+                    Don't have an account? <a href="register.html">Register here</a>
+                </p>
+
+                <a href="index.html" class="back-home">
+                    <i class="fas fa-arrow-left"></i> Back to Home
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/pages/login.js"></script>
+</body>
+
+</html>
