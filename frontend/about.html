@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" type="image/x-icon" href="icon.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+    
+      :root {
+        --primary: #2c3e50;
+        --secondary: #3498db;
+        --accent: #e74c3c;
+        --light: #ecf0f1;
+        --dark: #2c3e50;
+        --text: #333;
+        --text-light: #777;
+      }
+      .hero {
+        background: linear-gradient(
+            rgba(44, 62, 80, 0.8),
+            rgba(44, 62, 80, 0.8)
+          ),
+          url("https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-4.0.3")
+            center/cover no-repeat;
+        color: white;
+        text-align: center;
+        padding: 5rem 2rem;
+      }
+      .hero-content {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      .hero h1 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        font-family: "Times New Roman", Times, serif;
+      }
+      .hero p {
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+        opacity: 0.9;
+      }
+      .mission {
+        padding: 80px 0;
+        background-color: white;
+        margin: 30px;
+      }
+      .section-title {
+        text-align: center;
+        margin-bottom: 50px;
+        color: var(--primary);
+        font-size: 2.2rem;
+        position: relative;
+      }
+      .section-title:after {
+        content: "";
+        position: absolute;
+        width: 80px;
+        height: 4px;
+        background: var(--orange-gradient);
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 2px;
+      }
+      .mission-content {
+        display: flex;
+        align-items: center;
+        gap: 40px;
+      }
+      .mission-text {
+        flex: 1;
+      }
+      .mission-text p {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 28px;
+      }
+      .mission-image {
+        flex: 1;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+      .mission-image img {
+        width: 100%;
+        height: auto;
+        display: block;
+        transition: transform 0.5s ease;
+      }
+      .mission-image:hover img {
+        transform: scale(1.05);
+      }
+
+      .values {
+        padding-top: 16px;
+        padding-bottom: 1px;
+        background: linear-gradient(135deg, #f6f9fc 0%, #eef2f7 100%);
+      }
+      .values-grid {
+        display: flex;
+        gap: 15px;
+        justify-content: space-evenly;
+        margin-bottom: 100px;
+        margin-left: 15px;
+        margin-right: 15px;
+      }
+      .value-card {
+        background: white;
+        border-radius: 10px;
+        padding: 30px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        width: 350px;
+      }
+      .value-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
+      .value-icon {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+        background: var(--blue-gradient);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .value-title {
+        font-size: 1.4rem;
+        margin-bottom: 15px;
+        color: var(--primary);
+      }
+      .value-desc {
+        color: #666;
+        line-height: 1.6;
+      }
+      /* Team Section */
+      .team {
+        padding: 60px 0;
+        background-color: white;
+        margin: 20px;
+      }
+
+      .team-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 90px;
+        margin-left: 400px;
+      }
+
+      .team-member {
+        background: linear-gradient(135deg, #f6f9fc 0%, #eef2f7 100%);
+        border-radius: 10px;
+        overflow: hidden;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+      }
+
+      .team-member:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .member-image {
+        height: 250px;
+        overflow: hidden;
+      }
+
+      .member-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+      }
+
+      .team-member:hover .member-image img {
+        transform: scale(1.1);
+      }
+
+      .member-info {
+        padding: 25px;
+      }
+
+      .member-name {
+        font-size: 1.4rem;
+        margin-bottom: 5px;
+        color: var(--primary);
+      }
+
+      .member-role {
+        color: var(--secondary);
+        margin-bottom: 15px;
+        font-weight: 500;
+      }
+
+      .member-desc {
+        color: #666;
+        margin-bottom: 20px;
+      }
+
+      .social-links {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+      }
+
+      .social-links a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--blue-gradient);
+        color: white;
+        transition: all 0.3s ease;
+      }
+
+      .social-links a:hover {
+        transform: translateY(-3px);
+        background: var(--orange-gradient);
+      }
+    </style>
+  </head>
+  <special-header></special-header>
+  <body>
+    <section class="hero">
+      <div class="hero-content">
+    
+        <h1>About ReadON</h1>
+        <p>
+          Discover our story, mission, and the passionate team behind ReadON
+          Library. We're dedicated to fostering a love for reading and learning
+          in our community.
+        </p>
+      </div>
+    </section>
+
+    <section class="mission">
+      <div class="container">
+        <h2 class="section-title">Our Mission & Vision</h2>
+        <div class="mission-content">
+          <div class="mission-text">
+            <p>
+              At ReadON, our mission is to provide free and equitable access to
+              information, ideas, and knowledge through books, resources, and
+              services that inform, educate, and entertain.
+            </p>
+            <p>
+              We envision a community where everyone has the tools and
+              opportunities to learn, grow, and connect through the power of
+              reading. Our library serves as a cornerstone for education,
+              innovation, and cultural enrichment.
+            </p>
+            <p>
+              Since our establishment, we have been committed to promoting
+              literacy, encouraging lifelong learning, and serving as a
+              welcoming space for all members of our community.
+            </p>
+          </div>
+          <div class="mission-image">
+            <img
+              src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1150&q=80"
+              alt="Library interior"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="values">
+      <h2 class="section-title">Our Values</h2>
+      <div class="values-grid">
+        <div class="value-card">
+          <div class="value-icon">
+            <i class="fas fa-book-reader"></i>
+          </div>
+          <h3 class="value-title">Accessibility</h3>
+          <p class="value-desc">
+            We believe knowledge should be available to everyone, regardless of
+            background, age, or ability.
+          </p>
+        </div>
+
+        <div class="value-card">
+          <div class="value-icon">
+            <i class="fas fa-handshake"></i>
+          </div>
+          <h3 class="value-title">Community</h3>
+          <p class="value-desc">
+            We serve as a gathering place that strengthens community bonds
+            through shared learning experiences.
+          </p>
+        </div>
+
+        <div class="value-card">
+          <div class="value-icon">
+            <i class="fas fa-lightbulb"></i>
+          </div>
+          <h3 class="value-title">Innovation</h3>
+          <p class="value-desc">
+            We continuously evolve our services and resources to meet the
+            changing needs of our patrons.
+          </p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">
+            <i class="fa-solid fa-bullseye"></i>
+          </div>
+          <h3 class="value-title">Excellence</h3>
+          <p class="value-desc">
+            We are dedicated to delivering nothing less than excellence in
+            everything we do and setting new industry standards.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="team">
+      <div class="container">
+        <h2 class="section-title">Meet Our Team</h2>
+        <div class="team-grid">
+          <div class="team-member">
+            <div class="member-image">
+              <img
+                src="https://st.depositphotos.com/2101611/3925/v/450/depositphotos_39258143-stock-illustration-businessman-avatar-profile-picture.jpg"
+                alt="Sarah Johnson"
+              />
+            </div>
+            <div class="member-info">
+              <h3 class="member-name">Priyanshu</h3>
+              <p class="member-role">Student</p>
+              <p class="member-desc">
+                Just A Student
+              </p>
+              <div class="social-links">
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fas fa-envelope"></i></a>
+              </div>
+            </div>
+          </div>
+
+          
+        
+        </div>
+      </div>
+    </section>
+
+    <special-footer></special-footer>
+    <script src="app.js"></script>
+  </body>
+</html>

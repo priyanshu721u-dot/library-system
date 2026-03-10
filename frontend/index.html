@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReadON - Turn Reading ON</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-logo">
+            <span><img src="assets/ReadON.png" alt="ReadON"></span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="#books"><i class="fas fa-book"></i> Books</a></li>
+            <li><a href="about.html"><i class="fas fa-info-circle"></i> About Us</a></li>
+            <li><a href="login.html" class="btn-login"><i class="fas fa-user"></i> Login</a></li>
+        </ul>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Turn<br>Reading <span>ON</span></h1>
+            <p>Discover a world of knowledge with ourextensive collection of<br>
+                books, journals, and digital resources.</p>
+            <a href="login.html" class="btn-primary">Get Started <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="hero-image">
+             <img src="assets/Hero-Book.png" alt="Books" class="hero-img">
+        </div>
+    </section>
+    <section class="WaveBottom">
+        <div class="wave-bg">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+                <defs>
+                    <linearGradient id="gradient1" gradientTransform="rotate(10)">
+                        <stop offset="0%" stop-color="#1E3A8A" />
+                        <stop offset="50%" stop-color="#2563EB" />
+                        <stop offset="100%" stop-color="#3B82F6" />
+                    </linearGradient>
+                    <linearGradient id="gradient2" gradientTransform="rotate(10)">
+                        <stop offset="0%" stop-color="#2563EB" />
+                        <stop offset="50%" stop-color="#3B82F6" />
+                        <stop offset="100%" stop-color="#60A5FA" />
+                    </linearGradient>
+                    <linearGradient id="gradient3" gradientTransform="rotate(10)">
+                        <stop offset="0%" stop-color="#3B82F6" />
+                        <stop offset="50%" stop-color="#60A5FA" />
+                        <stop offset="100%" stop-color="#93C5FD" />
+                    </linearGradient>
+                </defs>
+                <path fill="url(#gradient3)" fill-opacity="0.5"
+                    d="M0,224L40,208C80,192,160,160,240,152C320,144,400,164,480,154C560,144,640,104,720,114C800,124,880,188,960,214C1040,240,1120,232,1200,210C1280,188,1360,156,1440,140L1440,0L0,0Z">
+                </path>
+
+                <path fill="url(#gradient2)" fill-opacity="0.7"
+                    d="M0,208L40,192C80,176,160,144,240,136C320,128,400,148,480,138C560,128
+                   ,640,88,720,98C800,108,880,172,960,198C1040,224,1120,216,1200,194C1280,172,1360,140,1440,124L1440,0L0,0Z">
+                </path>
+
+                <path fill="url(#gradient1)" fill-opacity="1"
+                    d="M0,48L40,64C80,80,160,112,240,117C320,122,400,102,480,112C560,122,640,162,720,152C800,142,880,78,960,52C1040,26,1120,36,1200,58C1280,80,1360,112,1440,128L1440,0L0,0Z">
+                </path>
+            </svg>
+        </div>
+
+        <!-- FEATURES SECTION -->
+        <section class="features">
+            <h2>Our Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-book-open"></i>
+                    <h3>Extensive Collection</h3>
+                    <p>Access thousands of books, journals, and research papers from various disciplines.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-laptop"></i>
+                    <h3>Tracking</h3>
+                    <p>Track your readings,set goals with the READON</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-clock"></i>
+                    <h3>24/7 Access</h3>
+                    <p>Our digital library is available round the clock from anywhere.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FROM OUR FEATURES SECTION -->
+        <!-- FROM OUR FEATURES SECTION -->
+        <section class="features-tabs">
+            <h2>From Our Features</h2>
+            <div class="tabs">
+                <button class="tab active" data-tab="borrowing">Book Borrowing</button>
+                <button class="tab" data-tab="progress">Reading Progress</button>
+                <button class="tab" data-tab="wishlist">Wishlist</button>
+                <button class="tab" data-tab="goals">Reading Goals</button>
+            </div>
+            <div class="tab-content active" id="borrowing">
+                <div class="tab-inner">
+                    <div class="tab-image">
+                        <i class="fas fa-book-reader fa-5x"></i>
+                    </div>
+                    <div class="tab-text">
+                        <h3>Book Borrowing</h3>
+                        <p>Browse thousands of books and request to borrow them instantly. Our admin approves requests
+                            quickly so you never wait long.</p>
+                        <ul>
+                            <li><i class="fas fa-check-circle"></i> Browse entire book catalog</li>
+                            <li><i class="fas fa-check-circle"></i> Request up to 3 books at once</li>
+                            <li><i class="fas fa-check-circle"></i> 14-day borrowing period</li>
+                            <li><i class="fas fa-check-circle"></i> Track due dates and history</li>
+                        </ul>
+                        <a href="login.html" class="btn-primary">Browse Books</a>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-content" id="progress">
+                <div class="tab-inner">
+                    <div class="tab-image">
+                        <i class="fas fa-chart-line fa-5x"></i>
+                    </div>
+                    <div class="tab-text">
+                        <h3>Reading Progress</h3>
+                        <p>Track every reading session and watch your progress grow. Log hours, pages, and see your
+                            reading stats evolve over time.</p>
+                        <ul>
+                            <li><i class="fas fa-check-circle"></i> Log daily reading sessions</li>
+                            <li><i class="fas fa-check-circle"></i> Track pages read per book</li>
+                            <li><i class="fas fa-check-circle"></i> View weekly and monthly stats</li>
+                            <li><i class="fas fa-check-circle"></i> Visual progress charts</li>
+                        </ul>
+                        <a href="login.html" class="btn-primary">Start Tracking</a>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-content" id="wishlist">
+                <div class="tab-inner">
+                    <div class="tab-image">
+                        <i class="fas fa-heart fa-5x"></i>
+                    </div>
+                    <div class="tab-text">
+                        <h3>Wishlist</h3>
+                        <p>Save books you want to read and get notified when they become available. Never miss a book
+                            you've been waiting for.</p>
+                        <ul>
+                            <li><i class="fas fa-check-circle"></i> Save books to your wishlist</li>
+                            <li><i class="fas fa-check-circle"></i> Get notified when available</li>
+                            <li><i class="fas fa-check-circle"></i> See availability status</li>
+                            <li><i class="fas fa-check-circle"></i> Quick borrow from wishlist</li>
+                        </ul>
+                        <a href="login.html" class="btn-primary">Build Wishlist</a>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-content" id="goals">
+                <div class="tab-inner">
+                    <div class="tab-image">
+                        <i class="fas fa-trophy fa-5x"></i>
+                    </div>
+                    <div class="tab-text">
+                        <h3>Reading Goals</h3>
+                        <p>Set weekly, monthly or yearly reading targets and track your progress. Compete with other
+                            students on the leaderboard.</p>
+                        <ul>
+                            <li><i class="fas fa-check-circle"></i> Set custom reading targets</li>
+                            <li><i class="fas fa-check-circle"></i> Weekly and monthly goals</li>
+                            <li><i class="fas fa-check-circle"></i> Progress percentage tracking</li>
+                            <li><i class="fas fa-check-circle"></i> Leaderboard rankings</li>
+                        </ul>
+                        <a href="login.html" class="btn-primary">Set Your Goal</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ANNOUNCEMENTS SECTION -->
+        <section class="announcements">
+            <h2>Latest News & Announcements</h2>
+            <div class="announcements-list" id="announcements-list">
+                <!-- Will be populated from API -->
+                <div class="announcement-item">
+                    <i class="fas fa-bullhorn"></i>
+                    <div>
+                        <h3>New Digital Journals</h3>
+                        <p>We've added 500+ new digital journals in technology and management. Explore them today!</p>
+                    </div>
+                </div>
+                <div class="announcement-item">
+                    <i class="fas fa-calendar"></i>
+                    <div>
+                        <h3>Library Orientation</h3>
+                        <p>Join our orientation program for new students. Learn how to use ReadON effectively.</p>
+                    </div>
+                </div>
+                <div class="announcement-item">
+                    <i class="fas fa-trophy"></i>
+                    <div>
+                        <h3>Quiz Competition</h3>
+                        <p>Participate in the annual quiz competition hosted by ReadON Library. Prizes worth ₹10,000
+                            await!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>About ReadON</h4>
+                    <div class="footer-divider"></div>
+                    <p>ReadON Library is committed to providing free access to information, fostering literacy, and
+                        serving
+                        as a community hub for learning.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <div class="footer-divider"></div>
+                    <ul>
+                        <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="about.html"><i class="fas fa-info-circle"></i> About Us</a></li>
+                        <li><a href="#"><i class="fas fa-book"></i> Collections</a></li>
+                        <li><a href="#"><i class="fas fa-calendar"></i> Events</a></li>
+                        <li><a href="#"><i class="fas fa-pen"></i> Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Resources</h4>
+                    <div class="footer-divider"></div>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-laptop"></i> Digital Library</a></li>
+                        <li><a href="#"><i class="fas fa-graduation-cap"></i> Research Help</a></li>
+                        <li><a href="#"><i class="fas fa-tools"></i> Technology Lending</a></li>
+                        <li><a href="#"><i class="fas fa-users"></i> Study Rooms</a></li>
+                        <li><a href="#"><i class="fas fa-child"></i> Children's Programs</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact Us</h4>
+                    <div class="footer-divider"></div>
+                    <ul class="contact-list">
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Library Lane, Bookville</li>
+                        <li><i class="fas fa-phone"></i> (555) 123-4567</li>
+                        <li><i class="fas fa-envelope"></i> info@readonlibrary.org</li>
+                        <li><i class="fas fa-clock"></i> Mon-Fri: 9am-8pm</li>
+                        <li><i class="fas fa-clock"></i> Sat-Sun: 10am-6pm</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 ReadON Library. All rights reserved.</p>
+            </div>
+        </footer>
+
+        <script src="js/pages/index.js"></script>
+</body>
+
+</html>
