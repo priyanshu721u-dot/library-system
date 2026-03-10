@@ -11,6 +11,8 @@ const blogRoutes = require('./routes/blogRoutes');
 const statsRoutes = require('./routes/statsRoutes');
 const readingGoalRoutes = require('./routes/readingGoalRoutes');
 const profileRoutes = require('./routes/profileRoutes');
+const commentRoutes = require('./routes/commentRoutes');
+
 
 
 dotenv.config();
@@ -31,6 +33,7 @@ app.use('/api/blogs', blogRoutes);
 app.use('/api/stats', statsRoutes);
 app.use('/api/goals', readingGoalRoutes);
 app.use('/api/profile', profileRoutes);
+app.use('/api/comments', commentRoutes);
 
 app.get('/' , (req , res ) => {
     res.json({message: 'Library management api is working'})
