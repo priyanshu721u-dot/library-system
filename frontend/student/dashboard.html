@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReadON - Dashboard</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/sidebar.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+</head>
+
+<body class="dashboard-body">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <img src="../assets/ReadON.png" alt="ReadON">
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section-title">Main Menu</div>
+            <a href="dashboard.html" class="active">
+                <i class="fas fa-home"></i> Dashboard
+            </a>
+            <a href="catalog.html">
+                <i class="fas fa-book"></i> Book Catalog
+            </a>
+            <a href="#" id="blogLink">
+                <i class="fas fa-pen"></i> Blogs
+            </a>
+            <a href="history.html">
+                <i class="fas fa-history"></i> My Borrowing History
+            </a>
+            <div class="nav-section-title">Account</div>
+            <a href="profile.html">
+                <i class="fas fa-user"></i> Manage My Account
+            </a>
+        </nav>
+        <div class="sidebar-bottom">
+            <div class="sidebar-user">
+                <div class="sidebar-user-avatar" id="userAvatar">S</div>
+                <div class="sidebar-user-info">
+                    <div class="sidebar-user-name" id="userName">Student</div>
+                    <div class="sidebar-user-role">Student</div>
+                </div>
+            </div>
+            <button class="btn-logout" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- SIDEBAR OVERLAY -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+
+        <!-- TOPBAR -->
+        <div class="topbar">
+            <div style="display:flex; align-items:center; gap:1rem;">
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="topbar-left">
+                    <h1>Dashboard</h1>
+                    <p id="greetingText">Good morning!</p>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <a href="#" class="topbar-icon" id="notifIcon">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge" id="notifBadge" style="display:none;">0</span>
+                </a>
+                <a href="profile.html" class="topbar-icon">
+                    <i class="fas fa-user"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- PAGE CONTENT -->
+        <div class="page-content">
+
+            <!-- BANNER -->
+            <div class="dashboard-banner">
+                <div class="banner-text">
+                    <h2 id="bannerGreeting">Welcome back, Student!</h2>
+                    <p>Track your reading progress and manage your books.</p>
+                </div>
+                <i class="fas fa-book-open banner-icon"></i>
+            </div>
+
+            <!-- STATS -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="statTotalBorrows">0</h3>
+                        <p>Total Borrows</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon orange">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="statActiveBorrows">0</h3>
+                        <p>Active Borrows</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="statHours">0</h3>
+                        <p>Reading Hours</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon purple">
+                        <i class="fas fa-bookmark"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="statPending">0</h3>
+                        <p>Pending Requests</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CURRENTLY BORROWED + RECENT ACTIVITY -->
+            <div class="grid-2">
+                <!-- Currently Borrowed -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fas fa-book-open"></i> Currently Borrowed Books
+                        </div>
+                        <a href="history.html" class="card-link">View All</a>
+                    </div>
+                    <div id="borrowedBooksList">
+                        <div class="empty-state">
+                            <i class="fas fa-book"></i>
+                            <p>No books currently borrowed</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fas fa-history"></i> Recent Activity
+                        </div>
+                    </div>
+                    <div id="recentActivity">
+                        <div class="empty-state">
+                            <i class="fas fa-history"></i>
+                            <p>No recent activity</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CHARTS -->
+            <div class="grid-2">
+                <!-- Weekly Reading Chart -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fas fa-chart-bar"></i> Weekly Reading Hours
+                        </div>
+                    </div>
+                    <div id="weeklyChart"></div>
+                </div>
+
+                <!-- Reading Goal -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fas fa-trophy"></i> Reading Goal
+                        </div>
+                        <a href="#" class="card-link" id="setGoalBtn">Set Goal</a>
+                    </div>
+                    <div id="goalChart"></div>
+                    <div id="goalInfo" style="text-align:center; margin-top:1rem;">
+                        <p style="color:var(--text-gray); font-size:0.9rem;">No reading goal set</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- READING PROGRESS -->
+            <div class="card" style="margin-bottom:1.5rem;">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-chart-line"></i> Reading Progress
+                    </div>
+                </div>
+                <div id="progressList">
+                    <div class="empty-state">
+                        <i class="fas fa-chart-line"></i>
+                        <p>No reading progress logged yet</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="../js/auth.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/pages/student-dashboard.js"></script>
+</body>
+
+</html>
