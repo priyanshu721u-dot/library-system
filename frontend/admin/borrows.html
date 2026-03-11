@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReadON - Manage Borrows</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/sidebar.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="dashboard-body">
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <img src="../assets/ReadON.png" alt="ReadON">
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section-title">Main Menu</div>
+            <a href="dashboard.html">
+                <i class="fas fa-home"></i> Dashboard
+            </a>
+            <a href="books.html">
+                <i class="fas fa-book"></i> Manage Books
+            </a>
+            <a href="borrows.html" class="active">
+                <i class="fas fa-hand-holding-heart"></i> Manage Borrows
+            </a>
+            <a href="blogs.html">
+                <i class="fas fa-pen"></i> Manage Blogs
+            </a>
+            <a href="users.html">
+                <i class="fas fa-users"></i> Manage Users
+            </a>
+            <div class="nav-section-title">Account</div>
+            <a href="profile.html">
+                <i class="fas fa-user"></i> Manage My Account
+            </a>
+        </nav>
+        <div class="sidebar-bottom">
+            <div class="sidebar-user">
+                <div class="sidebar-user-avatar" id="userAvatar">A</div>
+                <div class="sidebar-user-info">
+                    <div class="sidebar-user-name" id="userName">Admin</div>
+                    <div class="sidebar-user-role">Administrator</div>
+                </div>
+            </div>
+            <button class="btn-logout" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="main-content">
+
+        <div class="topbar">
+            <div style="display:flex; align-items:center; gap:1rem;">
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="topbar-left">
+                    <h1>Manage Borrows</h1>
+                    <p>Approve, reject and manage all borrow requests</p>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <a href="profile.html" class="topbar-icon">
+                    <i class="fas fa-user"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="page-content">
+
+            <div class="dashboard-banner">
+                <div class="banner-text">
+                    <h2>Borrow Management</h2>
+                    <p>View and manage all student borrow requests.</p>
+                </div>
+                <i class="fas fa-hand-holding-heart banner-icon"></i>
+            </div>
+
+            <!-- STATS -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue"><i class="fas fa-list"></i></div>
+                    <div class="stat-info">
+                        <h3 id="statTotal">0</h3>
+                        <p>Total Borrows</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange"><i class="fas fa-clock"></i></div>
+                    <div class="stat-info">
+                        <h3 id="statPending">0</h3>
+                        <p>Pending</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
+                    <div class="stat-info">
+                        <h3 id="statActive">0</h3>
+                        <p>Active</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon purple"><i class="fas fa-undo"></i></div>
+                    <div class="stat-info">
+                        <h3 id="statReturn">0</h3>
+                        <p>Return Requests</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FILTERS + TABLE -->
+            <div class="card">
+                <div class="card-header">
+                    <span id="borrowCount" style="font-size:0.85rem; color:var(--text-gray);">0 records</span>
+                    <div class="card-title">
+                        <i class="fas fa-list"></i> All Borrows
+                    </div>
+                    <div class="borrows-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Search student or book...">
+                    </div>
+                </div>
+
+                <!-- FILTER PILLS -->
+                <div class="filter-pills" style="margin-bottom:1.2rem;">
+                    <button class="pill active" data-filter="all">All</button>
+                    <button class="pill" data-filter="pending">Pending</button>
+                    <button class="pill" data-filter="approved">Approved</button>
+                    <button class="pill" data-filter="return_requested">Return Requests</button>
+                    <button class="pill" data-filter="returned">Returned</button>
+                    <button class="pill" data-filter="overdue">Overdue</button>
+                    <button class="pill" data-filter="rejected">Rejected</button>
+                </div>
+
+                <div class="admin-table-wrapper">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Book</th>
+                                <th>Borrow Date</th>
+                                <th>Due Date</th>
+                                <th>Penalty</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="borrowsTableBody">
+                            <tr>
+                                <td colspan="7" style="text-align:center; padding:2rem; color:var(--text-gray);">
+                                    <i class="fas fa-spinner fa-spin"></i> Loading...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- PAGINATION -->
+                <div class="pagination" id="pagination"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- DETAIL MODAL -->
+    <div class="modal-overlay" id="detailModalOverlay" style="display:none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-info-circle"></i> Borrow Details</h3>
+                <button class="modal-close" id="closeDetailModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="detailModalBody"></div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="../js/auth.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/pages/admin-borrows.js"></script>
+</body>
+</html>

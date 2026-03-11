@@ -66,8 +66,8 @@ function renderCartModal() {
     if (cart.length === 0) {
         cartList.innerHTML = `
             <div class="empty-state">
-                <i class="fas fa-shopping-cart"></i>
-                <p>Your cart is empty</p>
+                
+                <p>🛒 Your cart is empty</p>
             </div>`;
         return;
     }

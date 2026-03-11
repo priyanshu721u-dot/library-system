@@ -1,4 +1,8 @@
 /* Search and filters */
+.main-content{
+     background-color: rgb(200, 216, 229);
+}
+
 .catalog-filters {
     display: flex;
     align-items: center;
@@ -278,7 +282,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.5);
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -386,7 +390,7 @@
 .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.5);
     z-index: 200;
     display: flex;
     align-items: center;
@@ -414,7 +418,7 @@
 }
 
 .modal-header h3 {
-    font-size: 1.1rem;
+    font-size: 1.5rem;
     font-weight: 700;
     display: flex;
     align-items: center;
@@ -495,6 +499,16 @@
     color: white;
 }
 
+.empty-state {
+    text-align: center;
+    padding: 25px 10px;
+    color: #666;
+    font-size: 16px;
+    font-weight: 500;
+    opacity: 0.8;
+
+}
+
 /* Toast */
 .toast {
     position: fixed;
@@ -556,4 +570,3 @@
         grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     }
 }
-

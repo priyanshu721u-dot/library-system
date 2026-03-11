@@ -187,7 +187,7 @@ const approveReturn = async (req, res) => {
 const getMyBorrows = async (req, res) => {
     try {
         const borrows = await Borrow.find({ student: req.user._id })
-            .populate('book', 'title author coverImage')
+            .populate('book', 'title author coverImage ISBN category totalPages')
             .sort({ createdAt: -1 });
         res.json(borrows);
     } catch (error) {
