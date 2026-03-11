@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ReadON - My Borrowing History</title>
+    <title>ReadON - Blogs</title>
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/sidebar.css">
-    <link rel="stylesheet" href="../css/history.css">
+    <link rel="stylesheet" href="../css/blogs.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
@@ -25,10 +25,10 @@
             <a href="catalog.html">
                 <i class="fas fa-book"></i> Book Catalog
             </a>
-            <a href="blogs.html">
+            <a href="blogs.html" class="active">
                 <i class="fas fa-pen"></i> Blogs
             </a>
-            <a href="history.html" class="active">
+            <a href="history.html">
                 <i class="fas fa-history"></i> My Borrowing History
             </a>
             <div class="nav-section-title">Account</div>
@@ -62,14 +62,11 @@
                     <i class="fas fa-bars"></i>
                 </button>
                 <div class="topbar-left">
-                    <h1>My Borrowing History</h1>
-                    <p>Track all your borrowed books</p>
+                    <h1>Blogs</h1>
+                    <p>Read latest news and announcements</p>
                 </div>
             </div>
             <div class="topbar-right">
-                <button class="btn-export" id="exportBtn">
-                    <i class="fas fa-download"></i> Export to CSV
-                </button>
                 <a href="profile.html" class="topbar-icon">
                     <i class="fas fa-user"></i>
                 </a>
@@ -82,80 +79,57 @@
             <!-- BANNER -->
             <div class="dashboard-banner">
                 <div class="banner-text">
-                    <h2>Borrowing History</h2>
-                    <p>View and manage all your borrowed books.</p>
+                    <h2>Library Blogs</h2>
+                    <p>Stay updated with the latest news and announcements.</p>
                 </div>
-                <i class="fas fa-history banner-icon"></i>
+                <i class="fas fa-pen banner-icon"></i>
             </div>
 
-            <!-- CURRENTLY BORROWED -->
-            <div class="card" style="margin-bottom:1.5rem;">
-                <div class="card-header">
-                    <div class="card-title">
-                        <i class="fas fa-book-open"></i> Currently Borrowed Books
-                    </div>
-                </div>
-                <div id="currentlyBorrowed">
-                    <div class="empty-state">
-                        <i class="fas fa-book"></i>
-                        <p>No books currently borrowed</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- RECENT ACTIVITY -->
-            <div class="card" style="margin-bottom:1.5rem;">
-                <div class="card-header">
-                    <div class="card-title">
-                        <i class="fas fa-clock"></i> Recent Activity
-                    </div>
-                </div>
-                <div id="recentActivity">
-                    <div class="empty-state">
-                        <i class="fas fa-history"></i>
-                        <p>No recent activity</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ALL BORROWING RECORDS -->
+            <!-- BLOGS GRID -->
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">
-                        <i class="fas fa-list"></i> Borrowing Records
+                        <i class="fas fa-newspaper"></i> All Posts
                     </div>
-                    <div class="history-filters">
-                        <button class="filter-pill active" data-status="all">All</button>
-                        <button class="filter-pill" data-status="approved">Borrowed</button>
-                        <button class="filter-pill" data-status="returned">Returned</button>
-                        <button class="filter-pill" data-status="overdue">Overdue</button>
-                        <button class="filter-pill" data-status="pending">Pending</button>
-                    </div>
+                    <span id="blogCount" style="font-size:0.85rem; color:var(--text-gray);">0 posts</span>
                 </div>
-                <div id="borrowingRecords">
+                <div class="blogs-grid" id="blogsGrid">
                     <div class="loading-state">
                         <i class="fas fa-spinner fa-spin"></i>
-                        <p>Loading records...</p>
+                        <p>Loading blogs...</p>
                     </div>
                 </div>
-
-                <!-- Pagination -->
-                <div class="pagination" id="pagination"></div>
             </div>
 
         </div>
     </div>
 
-    <!-- VIEW DETAILS MODAL -->
-    <div class="modal-overlay" id="detailsModal" style="display:none;">
-        <div class="modal">
+    <!-- BLOG DETAIL MODAL -->
+    <div class="modal-overlay" id="blogModal" style="display:none;">
+        <div class="modal blog-modal">
             <div class="modal-header">
-                <h3><i class="fas fa-info-circle"></i> Borrow Details</h3>
-                <button class="modal-close" id="closeDetails">
+                <h3 id="modalBlogTitle">Blog Title</h3>
+                <button class="modal-close" id="closeBlogModal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="modal-body" id="detailsContent"></div>
+            <div class="modal-body">
+                <div class="blog-modal-meta" id="modalBlogMeta"></div>
+                <div class="blog-modal-content" id="modalBlogContent"></div>
+                <div class="blog-modal-comments">
+                    <h4><i class="fas fa-comments"></i> Comments</h4>
+                    <div id="commentsList"></div>
+                    <div class="comment-form">
+                        <div class="input-wrapper">
+                            <i class="fas fa-comment"></i>
+                            <input type="text" id="commentInput" placeholder="Write a comment...">
+                        </div>
+                        <button class="btn-comment" id="submitComment">
+                            <i class="fas fa-paper-plane"></i> Post
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -164,6 +138,6 @@
 
     <script src="../js/auth.js"></script>
     <script src="../js/api.js"></script>
-    <script src="../js/pages/history.js"></script>
+    <script src="../js/pages/blogs.js"></script>
 </body>
 </html>
