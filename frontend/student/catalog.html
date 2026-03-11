@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReadON - Book Catalog</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/sidebar.css">
+    <link rel="stylesheet" href="../css/catalog.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="dashboard-body">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <img src="../assets/ReadON.png" alt="ReadON">
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section-title">Main Menu</div>
+            <a href="dashboard.html">
+                <i class="fas fa-home"></i> Dashboard
+            </a>
+            <a href="catalog.html" class="active">
+                <i class="fas fa-book"></i> Book Catalog
+            </a>
+            <a href="blogs.html">
+                <i class="fas fa-pen"></i> Blogs
+            </a>
+            <a href="history.html">
+                <i class="fas fa-history"></i> My Borrowing History
+            </a>
+            <div class="nav-section-title">Account</div>
+            <a href="profile.html">
+                <i class="fas fa-user"></i> Manage My Account
+            </a>
+        </nav>
+        <div class="sidebar-bottom">
+            <div class="sidebar-user">
+                <div class="sidebar-user-avatar" id="userAvatar">S</div>
+                <div class="sidebar-user-info">
+                    <div class="sidebar-user-name" id="userName">Student</div>
+                    <div class="sidebar-user-role">Student</div>
+                </div>
+            </div>
+            <button class="btn-logout" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+
+        <!-- TOPBAR -->
+        <div class="topbar">
+            <div style="display:flex; align-items:center; gap:1rem;">
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="topbar-left">
+                    <h1>Book Catalog</h1>
+                    <p>Browse and borrow books</p>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <a href="#" class="topbar-icon" id="cartIcon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="badge" id="cartBadge" style="display:none;">0</span>
+                </a>
+                <a href="#" class="topbar-icon" id="wishlistIcon">
+                    <i class="fas fa-heart"></i>
+                </a>
+                <a href="profile.html" class="topbar-icon">
+                    <i class="fas fa-user"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- PAGE CONTENT -->
+        <div class="page-content">
+
+            <!-- BANNER -->
+            <div class="dashboard-banner">
+                <div class="banner-text">
+                    <h2>Discover Your Next Read</h2>
+                    <p>Browse our extensive collection and request books instantly.</p>
+                </div>
+                <i class="fas fa-books banner-icon"></i>
+            </div>
+
+            <!-- SEARCH AND FILTER -->
+            <div class="catalog-filters card">
+                <div class="search-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search by title, author or ISBN...">
+                </div>
+                <div class="filter-group">
+                    <div class="custom-select" id="categoryDropdown">
+                        <div class="custom-select-trigger">
+                            <span id="categorySelected">All Categories</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="custom-select-options">
+                            <div class="custom-option active" data-value="">All Categories</div>
+                            <div class="custom-option" data-value="Fiction">Fiction</div>
+                            <div class="custom-option" data-value="Non-Fiction">Non-Fiction</div>
+                            <div class="custom-option" data-value="Science">Science</div>
+                            <div class="custom-option" data-value="Technology">Technology</div>
+                            <div class="custom-option" data-value="History">History</div>
+                            <div class="custom-option" data-value="Biography">Biography</div>
+                            <div class="custom-option" data-value="Programming">Programming</div>
+                            <div class="custom-option" data-value="CS Department">CS Department</div>
+                        </div>
+                    </div>
+                    <button class="filter-btn active" data-sort="newest">Newest</button>
+                    <button class="filter-btn" data-sort="title">A-Z</button>
+                    <button class="filter-btn" data-sort="available">Available</button>
+                </div>
+            </div>
+
+            <!-- TRENDING BOOKS -->
+            <div class="card" style="margin-bottom:1.5rem;">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-fire"></i> Trending Books
+                    </div>
+                </div>
+                <div class="trending-list" id="trendingList">
+                    <div class="empty-state">
+                        <i class="fas fa-fire"></i>
+                        <p>No trending books</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ALL BOOKS GRID -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-book"></i> All Books
+                    </div>
+                    <span id="bookCount" style="font-size:0.85rem; color:var(--text-gray);">0 books</span>
+                </div>
+                <div class="books-grid" id="booksGrid">
+                    <div class="loading-state">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading books...</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- CART MODAL -->
+    <div class="modal-overlay" id="cartModal" style="display:none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-shopping-cart"></i> My Cart</h3>
+                <button class="modal-close" id="closeCart"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" id="cartList">
+                <div class="empty-state">
+                    <i class="fas fa-shopping-cart"></i>
+                    <p>Your cart is empty</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary" id="borrowAllBtn">
+                    <i class="fas fa-check"></i> Request All Books
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- WISHLIST MODAL -->
+    <div class="modal-overlay" id="wishlistModal" style="display:none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-heart"></i> My Wishlist</h3>
+                <button class="modal-close" id="closeWishlist"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" id="wishlistList">
+                <div class="empty-state">
+                    <i class="fas fa-heart"></i>
+                    <p>Your wishlist is empty</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div class="toast" id="toast"></div>
+
+    <script src="../js/auth.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/pages/catalog.js"></script>
+</body>
+
+</html>
