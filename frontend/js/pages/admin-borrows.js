@@ -64,17 +64,19 @@ function renderTable() {
         filtered = filtered.filter(b => b.status === currentFilter);
     }
 
-    if (currentSearch) {
-        const q = currentSearch.toLowerCase();
-        filtered = filtered.filter(b =>
-            b.student.username.toLowerCase().includes(q) ||
-            b.book.title.toLowerCase().includes(q)
-        );
-    }
+   if (currentSearch) {
+    const q = currentSearch.toLowerCase();
+    filtered = filtered.filter(b =>
+        b.book && b.student &&
+        (b.student.username.toLowerCase().includes(q) ||
+        b.book.title.toLowerCase().includes(q))
+    );
+}
 
-    document.getElementById('borrowCount').textContent = `${filtered.length} records`;
+    const safeBorrows = filtered.filter(b => b.book && b.book.title && b.student && b.student.username);
+    document.getElementById('borrowCount').textContent = `${safeBorrows.length} records`;
 
-    if (filtered.length === 0) {
+   if (safeBorrows.length === 0) {
         document.getElementById('borrowsTableBody').innerHTML = `
             <tr>
                 <td colspan="7" style="text-align:center; padding:2rem; color:var(--text-gray);">
@@ -83,8 +85,7 @@ function renderTable() {
             </tr>`;
         return;
     }
-
-    document.getElementById('borrowsTableBody').innerHTML = filtered.map(b => `
+    document.getElementById('borrowsTableBody').innerHTML = safeBorrows.map(b => `
         <tr>
             <td>
                 <div style="font-weight:600;">${b.student.username}</div>

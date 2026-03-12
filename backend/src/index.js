@@ -34,6 +34,7 @@ app.use('/api/borrows', borrowRoutes);
 app.use('/api/reading', readingRoutes);
 app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/blogs', blogRoutes);
 app.use('/api/stats', statsRoutes);
 app.use('/api/goals', readingGoalRoutes);

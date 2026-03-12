@@ -36,6 +36,10 @@ const userScema = new mongoose.Schema({
     penalties: {
         type: Number,
         default: 0
+    },
+    isBlocked: { 
+        type: Boolean,
+         default: false 
     }
 
 },{ timestamps: true });

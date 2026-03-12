@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReadON - Manage Blogs</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/sidebar.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="dashboard-body">
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <img src="../assets/ReadON.png" alt="ReadON">
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section-title">Main Menu</div>
+            <a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a>
+            <a href="books.html"><i class="fas fa-book"></i> Manage Books</a>
+            <a href="borrows.html"><i class="fas fa-hand-holding-heart"></i> Manage Borrows</a>
+            <a href="blogs.html" class="active"><i class="fas fa-pen"></i> Manage Blogs</a>
+            <a href="users.html"><i class="fas fa-users"></i> Manage Users</a>
+            <div class="nav-section-title">Account</div>
+            <a href="profile.html"><i class="fas fa-user"></i> Manage My Account</a>
+        </nav>
+        <div class="sidebar-bottom">
+            <div class="sidebar-user">
+                <div class="sidebar-user-avatar" id="userAvatar">A</div>
+                <div class="sidebar-user-info">
+                    <div class="sidebar-user-name" id="userName">Admin</div>
+                    <div class="sidebar-user-role">Administrator</div>
+                </div>
+            </div>
+            <button class="btn-logout" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="main-content">
+
+        <div class="topbar">
+            <div style="display:flex; align-items:center; gap:1rem;">
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="topbar-left">
+                    <h1>Manage Blogs</h1>
+                    <p>Create, edit and delete blog posts</p>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <button class="btn-add" id="openAddModal">
+                    <i class="fas fa-plus"></i> New Post
+                </button>
+                <a href="profile.html" class="topbar-icon">
+                    <i class="fas fa-user"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="page-content">
+
+            <div class="dashboard-banner">
+                <div class="banner-text">
+                    <h2>Blog Management</h2>
+                    <p>Write and manage all library blog posts from here.</p>
+                </div>
+                <i class="fas fa-pen banner-icon"></i>
+            </div>
+
+            <!-- SEARCH -->
+            <div class="card" style="margin-bottom:1.5rem;">
+                <div class="filter-row">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Search blogs...">
+                    </div>
+                    <span id="blogCount" style="font-size:0.85rem; color:var(--text-gray);">0 posts</span>
+                </div>
+            </div>
+
+            <!-- BLOGS TABLE -->
+            <div class="card">
+                <div class="admin-table-wrapper">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Cover</th>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Date</th>
+                                <th>Comments</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="blogsTableBody">
+                            <tr>
+                                <td colspan="6" style="text-align:center; padding:2rem; color:var(--text-gray);">
+                                    <i class="fas fa-spinner fa-spin"></i> Loading...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ADD/EDIT MODAL -->
+    <div class="modal-overlay" id="blogModalOverlay" style="display:none;">
+        <div class="modal" style="max-width:600px;">
+            <div class="modal-header">
+                <h3 id="blogModalTitle"><i class="fas fa-pen"></i> New Blog Post</h3>
+                <button class="modal-close" id="closeBlogModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="admin-form-group">
+                    <label>Title *</label>
+                    <input type="text" id="blogTitle" placeholder="Blog title">
+                </div>
+                <div class="admin-form-group">
+                    <label>Content *</label>
+                    <textarea id="blogContent" rows="6" placeholder="Write your blog content..."></textarea>
+                </div>
+                <div class="admin-form-group">
+                    <label>Cover Image URL</label>
+                    <input type="text" id="blogCoverImage" placeholder="https://...">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" id="cancelBlogModal">Cancel</button>
+                <button class="btn-submit" id="saveBlogBtn" style="width:auto; padding:0.75rem 2rem;">
+                    <span>Publish Post</span>
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEW COMMENTS MODAL -->
+    <div class="modal-overlay" id="commentsModalOverlay" style="display:none;">
+        <div class="modal" style="max-width:500px;">
+            <div class="modal-header">
+                <h3><i class="fas fa-comments"></i> Comments</h3>
+                <button class="modal-close" id="closeCommentsModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="commentsModalBody">
+            </div>
+        </div>
+    </div>
+
+    <!-- DELETE CONFIRM MODAL -->
+    <div class="modal-overlay" id="deleteModalOverlay" style="display:none;">
+        <div class="modal" style="max-width:400px;">
+            <div class="modal-header">
+                <h3><i class="fas fa-trash" style="color:#dc2626;"></i> Delete Blog</h3>
+                <button class="modal-close" id="closeDeleteModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p style="color:var(--text-gray); font-size:0.95rem;">
+                    Are you sure you want to delete <strong id="deleteBlogName"></strong>? This cannot be undone.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" id="cancelDeleteModal">Cancel</button>
+                <button class="btn-delete" id="confirmDeleteBtn">
+                    <i class="fas fa-trash"></i> Delete
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="../js/auth.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/pages/admin-blogs.js"></script>
+</body>
+</html>

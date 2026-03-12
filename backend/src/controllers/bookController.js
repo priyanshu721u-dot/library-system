@@ -51,7 +51,7 @@ const getBook = async (req , res ) =>{     //getting an single book
 
 const updateBook = async ( req , res ) => {
     try{
-        const book = await Book.findById();
+        const book = await Book.findById(req.params.id);
         if(!book){
             return res.status(404).json({message: 'Book not found'})
         }

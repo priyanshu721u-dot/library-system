@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReadON - Manage Users</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/sidebar.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="dashboard-body">
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <img src="../assets/ReadON.png" alt="ReadON">
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section-title">Main Menu</div>
+            <a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a>
+            <a href="books.html"><i class="fas fa-book"></i> Manage Books</a>
+            <a href="borrows.html"><i class="fas fa-hand-holding-heart"></i> Manage Borrows</a>
+            <a href="blogs.html"><i class="fas fa-pen"></i> Manage Blogs</a>
+            <a href="users.html" class="active"><i class="fas fa-users"></i> Manage Users</a>
+            <div class="nav-section-title">Account</div>
+            <a href="profile.html"><i class="fas fa-user"></i> Manage My Account</a>
+        </nav>
+        <div class="sidebar-bottom">
+            <div class="sidebar-user">
+                <div class="sidebar-user-avatar" id="userAvatar">A</div>
+                <div class="sidebar-user-info">
+                    <div class="sidebar-user-name" id="userName">Admin</div>
+                    <div class="sidebar-user-role">Administrator</div>
+                </div>
+            </div>
+            <button class="btn-logout" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="main-content">
+
+        <div class="topbar">
+            <div style="display:flex; align-items:center; gap:1rem;">
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="topbar-left">
+                    <h1>Manage Users</h1>
+                    <p>View and manage all registered students</p>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <a href="profile.html" class="topbar-icon">
+                    <i class="fas fa-user"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="page-content">
+
+            <div class="dashboard-banner">
+                <div class="banner-text">
+                    <h2>User Management</h2>
+                    <p>View, block and unblock student accounts.</p>
+                </div>
+                <i class="fas fa-users banner-icon"></i>
+            </div>
+
+            <!-- SEARCH + FILTER -->
+            <div class="card" style="margin-bottom:1.5rem;">
+                <div class="filter-row">
+                    <div class="filter-pills">
+                        <button class="pill active" data-filter="all">All</button>
+                        <button class="pill" data-filter="active">Active</button>
+                        <button class="pill" data-filter="blocked">Blocked</button>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:1rem;">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchInput" placeholder="Search by name or email...">
+                        </div>
+                        <span id="userCount" style="font-size:0.85rem; color:var(--text-gray);">0 users</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- USERS TABLE -->
+            <div class="card">
+                <div class="admin-table-wrapper">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Email</th>
+                                <th>Joined</th>
+                                <th>Total Borrows</th>
+                                <th>Penalties</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <tr>
+                                <td colspan="7" style="text-align:center; padding:2rem; color:var(--text-gray);">
+                                    <i class="fas fa-spinner fa-spin"></i> Loading...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="../js/auth.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/pages/admin-users.js"></script>
+</body>
+</html>
