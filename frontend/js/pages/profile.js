@@ -37,7 +37,7 @@ async function loadProfile() {
         document.getElementById('profileName').textContent = p.username;
         document.getElementById('profileEmail').textContent = p.email;
         document.getElementById('profilePenalties').textContent = `₹${p.penalties || 0}`;
-        document.getElementById('profileHours').textContent = p.totalReadingHours || 0;
+        document.getElementById('profileHours').textContent = Math.round(p.totalReadingHours) || 0;
 
         // Pre-fill form
         document.getElementById('updateUsername').value = p.username;

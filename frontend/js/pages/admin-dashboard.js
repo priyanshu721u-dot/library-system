@@ -326,7 +326,7 @@ async function loadTopReaders() {
                 <div class="reader-avatar">${reader.username.charAt(0).toUpperCase()}</div>
                 <div class="reader-info">
                     <div class="reader-name">${reader.username}</div>
-                    <div class="reader-hours">${reader.totalReadingHours || 0} hours read</div>
+                    <div class="reader-hours">${Math.round(reader.totalReadingHours) || 0} hours read</div>
                 </div>
                 <div class="reader-badge">#${i + 1}</div>
             </div>

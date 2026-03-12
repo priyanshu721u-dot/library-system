@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ReadON - Dashboard</title>
+    <link rel="icon" href="../assets/Icon.png" type="image/x-icon">
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/sidebar.css">
     <link rel="stylesheet" href="../css/dashboard.css">
@@ -196,6 +197,11 @@
                     </div>
                 </div>
             </div>
+            <div style="display:flex; justify-content:flex-end; margin-bottom:1rem;">
+                <button class="btn-log-session" id="openLogSessionBtn">
+                    <i class="fas fa-book-open"></i> Log Reading Session
+                </button>
+            </div>
 
             <!-- READING PROGRESS -->
             <div class="card" style="margin-bottom:1.5rem;">
@@ -214,7 +220,118 @@
 
         </div>
     </div>
+    <!-- LOG READING SESSION MODAL -->
+    <div class="modal-overlay" id="logSessionOverlay" style="display:none;">
+        <div class="modal" style="max-width:480px;">
+            <div class="modal-header">
+                <h3><i class="fas fa-book-open" style="color:var(--primary-blue);"></i> Log Reading Session</h3>
+                <button class="modal-close" id="closeLogSession"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Book *</label>
+                    <select id="sessionBook" style="width:100%; padding:0.8rem 1rem; border:2px solid #e2e8f0;
+                    border-radius:10px; font-size:0.9rem; font-family:'Inter',sans-serif; outline:none;
+                    background:var(--light-gray); color:var(--text-dark);">
+                        <option value="">Select a book...</option>
+                    </select>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                    <div class="form-group">
+                        <label>Pages Read *</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-file-alt"></i>
+                            <input type="number" id="sessionPages" placeholder="e.g. 20" min="1">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Duration (mins) *</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-clock"></i>
+                            <input type="number" id="sessionDuration" placeholder="e.g. 45" min="1">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Current Page</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-bookmark"></i>
+                        <input type="number" id="sessionCurrentPage" placeholder="e.g. 120" min="1">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" id="cancelLogSession">Cancel</button>
+                <button class="btn-submit" id="saveLogSession" style="width:auto; padding:0.75rem 2rem;">
+                    <span>Log Session</span><i class="fas fa-save"></i>
+                </button>
+            </div>
+        </div>
+    </div>
 
+    <!-- SET GOAL MODAL -->
+    <div class="modal-overlay" id="setGoalOverlay" style="display:none;">
+        <div class="modal" style="max-width:440px;">
+            <div class="modal-header">
+                <h3><i class="fas fa-bullseye" style="color:var(--orange);"></i> Set Reading Goal</h3>
+                <button class="modal-close" id="closeSetGoal"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                    <div class="form-group">
+                        <label>Target Books</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-book"></i>
+                            <input type="number" id="goalBooks" placeholder="e.g. 10" min="1">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Target Hours</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-clock"></i>
+                            <input type="number" id="goalHours" placeholder="e.g. 50" min="1">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Deadline *</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-calendar"></i>
+                        <input type="date" id="goalDeadline">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" id="cancelSetGoal">Cancel</button>
+                <button class="btn-submit" id="saveGoalBtn" style="width:auto; padding:0.75rem 2rem;">
+                    <span>Set Goal</span><i class="fas fa-bullseye"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- CELEBRATION POPUP -->
+    <div id="celebrationPopup" style="display:none; position:fixed; inset:0; z-index:3000;
+    background:rgba(0,0,0,0.6); align-items:center; justify-content:center;">
+        <div style="background:white; border-radius:24px; padding:2.5rem; text-align:center;
+        max-width:380px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,0.3); position:relative;">
+            <div id="celebrationEmoji" style="font-size:4rem; margin-bottom:1rem;">🎉</div>
+            <h2 style="font-size:1.5rem; font-weight:800; color:var(--text-dark); margin-bottom:0.5rem;">
+                Congratulations!
+            </h2>
+            <p id="celebrationBookTitle" style="font-size:1rem; color:var(--primary-blue);
+            font-weight:600; margin-bottom:0.5rem;"></p>
+            <p id="celebrationMessage" style="font-size:0.9rem; color:var(--text-gray); margin-bottom:1.5rem;"></p>
+            <div id="sparkles" style="position:absolute; top:0; left:0; width:100%;
+            height:100%; pointer-events:none; border-radius:24px; overflow:hidden;"></div>
+            <button onclick="closeCelebration()" style="padding:0.8rem 2rem;
+            background:linear-gradient(135deg, #ff9800, #ff5722); color:white;
+            border:none; border-radius:10px; font-size:1rem; font-weight:700;
+            font-family:'Inter',sans-serif; cursor:pointer;">
+                Keep Reading! 
+            </button>
+        </div>
+    </div>
+    <div class="toast" id="toast"></div>
     <script src="../js/auth.js"></script>
     <script src="../js/api.js"></script>
     <script src="../js/pages/student-dashboard.js"></script>

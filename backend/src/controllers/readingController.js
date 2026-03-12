@@ -39,7 +39,7 @@ const logReadingSession = async (req , res) => {
 const getMyReadingSessions = async (req , res) => {
     try{
         const sessions = await ReadingSession.find({student:req.user._id})
-            .populate('book','title author coverImage totalpages')
+            .populate('book','title author coverImage totalPages')
             .sort({createdAt: -1});
             res.json(sessions)
     }catch(error){

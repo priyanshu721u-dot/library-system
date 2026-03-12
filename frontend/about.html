@@ -1,366 +1,435 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>About</title>
-    <link rel="stylesheet" href="style.css" />
-    <link rel="icon" type="image/x-icon" href="icon.png" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      }
-    
-      :root {
-        --primary: #2c3e50;
-        --secondary: #3498db;
-        --accent: #e74c3c;
-        --light: #ecf0f1;
-        --dark: #2c3e50;
-        --text: #333;
-        --text-light: #777;
-      }
-      .hero {
-        background: linear-gradient(
-            rgba(44, 62, 80, 0.8),
-            rgba(44, 62, 80, 0.8)
-          ),
-          url("https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-4.0.3")
-            center/cover no-repeat;
-        color: white;
-        text-align: center;
-        padding: 5rem 2rem;
-      }
-      .hero-content {
-        max-width: 800px;
-        margin: 0 auto;
-      }
-      .hero h1 {
-        font-size: 3rem;
-        margin-bottom: 1rem;
-        font-family: "Times New Roman", Times, serif;
-      }
-      .hero p {
-        font-size: 1.2rem;
-        margin-bottom: 2rem;
-        opacity: 0.9;
-      }
-      .mission {
-        padding: 80px 0;
-        background-color: white;
-        margin: 30px;
-      }
-      .section-title {
-        text-align: center;
-        margin-bottom: 50px;
-        color: var(--primary);
-        font-size: 2.2rem;
-        position: relative;
-      }
-      .section-title:after {
-        content: "";
-        position: absolute;
-        width: 80px;
-        height: 4px;
-        background: var(--orange-gradient);
-        bottom: -15px;
-        left: 50%;
-        transform: translateX(-50%);
-        border-radius: 2px;
-      }
-      .mission-content {
-        display: flex;
-        align-items: center;
-        gap: 40px;
-      }
-      .mission-text {
-        flex: 1;
-      }
-      .mission-text p {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        line-height: 28px;
-      }
-      .mission-image {
-        flex: 1;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      }
-      .mission-image img {
-        width: 100%;
-        height: auto;
-        display: block;
-        transition: transform 0.5s ease;
-      }
-      .mission-image:hover img {
-        transform: scale(1.05);
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ReadON - About</title>
+  <link rel="icon" href="assets/Icon.png" type="image/x-icon">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/auth.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    body {
+      background: var(--light-gray);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      background: white;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      height: 70px;
+      width: 0px;
+    }
+
+    .nav-logo img {
+      height: 190px;
+    }
+
+    .navbar-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+
+    }
+
+    .navbar-links a {
+      text-decoration: none;
+      color: var(--text-gray);
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: color 0.3s ease;
+    }
+
+    .navbar-links a:hover,
+    .navbar-links a.active {
+      color: var(--primary-blue);
+    }
+
+    .navbar-btn {
+      padding: 0.6rem 1.4rem;
+      background: var(--primary-blue);
+      color: white;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .navbar-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    /* ABOUT SECTION */
+    .about-section {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 2rem;
+    }
+
+    .about-container {
+      max-width: 900px;
+      width: 100%;
+      background: white;
+      border-radius: 24px;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+
+    .about-header {
+      background: linear-gradient(135deg, #1e3a8a, #2563eb, #3b82f6);
+      padding: 3rem;
+      text-align: center;
+      color: white;
+    }
+
+
+
+    .about-header-icon {
+      background: rgba(255, 255, 255, 0.15);
+      width: 100px;
+      height: 100px;
+      border-radius: 20px;
+      overflow: hidden;
+      margin: 0 auto 1.5rem auto;
+      padding-top: 10px;
+      
+    }
+
+    .about-header-icon img {
+      width: 76%;
+      height: 85%;
+      object-fit: cover;
+     
+    }
+
+    .about-header h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 0.8rem;
+    }
+
+    .about-header p {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.85);
+      max-width: 500px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    .about-body {
+      padding: 3rem;
+    }
+
+    .about-body p {
+      font-size: 1rem;
+      color: var(--text-gray);
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      max-width: 650px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .about-features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .about-feature {
+      background: var(--light-gray);
+      border-radius: 16px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .about-feature:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+
+    .about-feature-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin: 0 auto 1rem auto;
+    }
+
+    .icon-blue {
+      background: #eff6ff;
+      color: var(--primary-blue);
+    }
+
+    .icon-green {
+      background: #f0fdf4;
+      color: #16a34a;
+    }
+
+    .icon-orange {
+      background: #fff7ed;
+      color: var(--orange);
+    }
+
+    .icon-purple {
+      background: #faf5ff;
+      color: #7c3aed;
+    }
+
+    .icon-pink {
+      background: #fdf2f8;
+      color: #db2777;
+    }
+
+    .icon-teal {
+      background: #f0fdfa;
+      color: #0d9488;
+    }
+
+    .about-feature h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 0.4rem;
+    }
+
+    .about-feature p {
+      font-size: 0.82rem;
+      color: var(--text-gray);
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .about-cta {
+      text-align: center;
+      margin-top: 2.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    .about-cta h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .about-cta p {
+      font-size: 0.9rem;
+      color: var(--text-gray);
+      margin-bottom: 1.5rem;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      padding: 0.8rem 2rem;
+      background: var(--primary-blue);
+      color: white;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      padding: 0.8rem 2rem;
+      background: var(--light-gray);
+      color: var(--text-dark);
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      border: 2px solid #e2e8f0;
+      transition: all 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+      background: #e2e8f0;
+      transform: translateY(-2px);
+    }
+
+    /* FOOTER */
+    .footer {
+      text-align: center;
+      padding: 1.5rem;
+      color: var(--text-gray);
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 768px) {
+      .about-features {
+        grid-template-columns: 1fr 1fr;
       }
 
-      .values {
-        padding-top: 16px;
-        padding-bottom: 1px;
-        background: linear-gradient(135deg, #f6f9fc 0%, #eef2f7 100%);
-      }
-      .values-grid {
-        display: flex;
-        gap: 15px;
-        justify-content: space-evenly;
-        margin-bottom: 100px;
-        margin-left: 15px;
-        margin-right: 15px;
-      }
-      .value-card {
-        background: white;
-        border-radius: 10px;
-        padding: 30px;
-        text-align: center;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        transition: all 0.3s ease;
-        width: 350px;
-      }
-      .value-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-      }
-      .value-icon {
-        font-size: 2.5rem;
-        margin-bottom: 20px;
-        background: var(--blue-gradient);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-      }
-      .value-title {
-        font-size: 1.4rem;
-        margin-bottom: 15px;
-        color: var(--primary);
-      }
-      .value-desc {
-        color: #666;
-        line-height: 1.6;
-      }
-      /* Team Section */
-      .team {
-        padding: 60px 0;
-        background-color: white;
-        margin: 20px;
+      .about-header h1 {
+        font-size: 1.6rem;
       }
 
-      .team-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 90px;
-        margin-left: 400px;
+      .navbar-links {
+        display: none;
       }
 
-      .team-member {
-        background: linear-gradient(135deg, #f6f9fc 0%, #eef2f7 100%);
-        border-radius: 10px;
-        overflow: hidden;
-        text-align: center;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        transition: all 0.3s ease;
+      .about-body {
+        padding: 2rem;
       }
 
-      .team-member:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      .about-header {
+        padding: 2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .about-features {
+        grid-template-columns: 1fr;
       }
 
-      .member-image {
-        height: 250px;
-        overflow: hidden;
+      .cta-buttons {
+        flex-direction: column;
       }
+    }
+  </style>
+</head>
 
-      .member-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.5s ease;
-      }
+<body>
 
-      .team-member:hover .member-image img {
-        transform: scale(1.1);
-      }
+  <!-- NAVBAR -->
 
-      .member-info {
-        padding: 25px;
-      }
+  <nav class="navbar">
+    <div class="nav-logo">
+      <a href="index.html" class="navbar-logo">
+        <img src="assets/ReadON.png" alt="ReadON">
+      </a>
+    </div>
+    <div class="navbar-links">
+      <a href="index.html">Home</a>
+      <a href="about.html" class="active">About</a>
+      <a href="login.html">Login</a>
+    </div>
+    <a href="register.html" class="navbar-btn">Get Started</a>
+  </nav>
 
-      .member-name {
-        font-size: 1.4rem;
-        margin-bottom: 5px;
-        color: var(--primary);
-      }
+  <!-- ABOUT SECTION -->
+  <div class="about-section">
+    <div class="about-container">
+      <div class="about-header">
+        <div class="about-header-icon">
+          <img src="assets/Icon.png" alt="ReadON">
 
-      .member-role {
-        color: var(--secondary);
-        margin-bottom: 15px;
-        font-weight: 500;
-      }
-
-      .member-desc {
-        color: #666;
-        margin-bottom: 20px;
-      }
-
-      .social-links {
-        display: flex;
-        justify-content: center;
-        gap: 15px;
-      }
-
-      .social-links a {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: var(--blue-gradient);
-        color: white;
-        transition: all 0.3s ease;
-      }
-
-      .social-links a:hover {
-        transform: translateY(-3px);
-        background: var(--orange-gradient);
-      }
-    </style>
-  </head>
-  <special-header></special-header>
-  <body>
-    <section class="hero">
-      <div class="hero-content">
-    
+        </div>
         <h1>About ReadON</h1>
-        <p>
-          Discover our story, mission, and the passionate team behind ReadON
-          Library. We're dedicated to fostering a love for reading and learning
-          in our community.
+        <p>A modern library management system built to make reading accessible, trackable and enjoyable for everyone.
         </p>
       </div>
-    </section>
 
-    <section class="mission">
-      <div class="container">
-        <h2 class="section-title">Our Mission & Vision</h2>
-        <div class="mission-content">
-          <div class="mission-text">
-            <p>
-              At ReadON, our mission is to provide free and equitable access to
-              information, ideas, and knowledge through books, resources, and
-              services that inform, educate, and entertain.
-            </p>
-            <p>
-              We envision a community where everyone has the tools and
-              opportunities to learn, grow, and connect through the power of
-              reading. Our library serves as a cornerstone for education,
-              innovation, and cultural enrichment.
-            </p>
-            <p>
-              Since our establishment, we have been committed to promoting
-              literacy, encouraging lifelong learning, and serving as a
-              welcoming space for all members of our community.
-            </p>
-          </div>
-          <div class="mission-image">
-            <img
-              src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1150&q=80"
-              alt="Library interior"
-            />
-          </div>
-        </div>
-      </div>
-    </section>
+      <div class="about-body">
+        <p>ReadON is a full-featured digital library platform that connects students with books, tracks reading
+          progress, and helps library administrators manage their entire collection effortlessly.</p>
 
-    <section class="values">
-      <h2 class="section-title">Our Values</h2>
-      <div class="values-grid">
-        <div class="value-card">
-          <div class="value-icon">
-            <i class="fas fa-book-reader"></i>
-          </div>
-          <h3 class="value-title">Accessibility</h3>
-          <p class="value-desc">
-            We believe knowledge should be available to everyone, regardless of
-            background, age, or ability.
-          </p>
-        </div>
-
-        <div class="value-card">
-          <div class="value-icon">
-            <i class="fas fa-handshake"></i>
-          </div>
-          <h3 class="value-title">Community</h3>
-          <p class="value-desc">
-            We serve as a gathering place that strengthens community bonds
-            through shared learning experiences.
-          </p>
-        </div>
-
-        <div class="value-card">
-          <div class="value-icon">
-            <i class="fas fa-lightbulb"></i>
-          </div>
-          <h3 class="value-title">Innovation</h3>
-          <p class="value-desc">
-            We continuously evolve our services and resources to meet the
-            changing needs of our patrons.
-          </p>
-        </div>
-        <div class="value-card">
-          <div class="value-icon">
-            <i class="fa-solid fa-bullseye"></i>
-          </div>
-          <h3 class="value-title">Excellence</h3>
-          <p class="value-desc">
-            We are dedicated to delivering nothing less than excellence in
-            everything we do and setting new industry standards.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="team">
-      <div class="container">
-        <h2 class="section-title">Meet Our Team</h2>
-        <div class="team-grid">
-          <div class="team-member">
-            <div class="member-image">
-              <img
-                src="https://st.depositphotos.com/2101611/3925/v/450/depositphotos_39258143-stock-illustration-businessman-avatar-profile-picture.jpg"
-                alt="Sarah Johnson"
-              />
+        <div class="about-features">
+          <div class="about-feature">
+            <div class="about-feature-icon icon-blue">
+              <i class="fas fa-book"></i>
             </div>
-            <div class="member-info">
-              <h3 class="member-name">Priyanshu</h3>
-              <p class="member-role">Student</p>
-              <p class="member-desc">
-                Just A Student
-              </p>
-              <div class="social-links">
-                <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fas fa-envelope"></i></a>
-              </div>
-            </div>
+            <h4>Book Catalog</h4>
+            <p>Browse and borrow from a rich collection of books across all genres.</p>
           </div>
+          <div class="about-feature">
+            <div class="about-feature-icon icon-green">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <h4>Reading Tracker</h4>
+            <p>Log reading sessions and track your progress over time.</p>
+          </div>
+          <div class="about-feature">
+            <div class="about-feature-icon icon-orange">
+              <i class="fas fa-trophy"></i>
+            </div>
+            <h4>Leaderboard</h4>
+            <p>Compete with fellow readers and climb the reading leaderboard.</p>
+          </div>
+          <div class="about-feature">
+            <div class="about-feature-icon icon-purple">
+              <i class="fas fa-pen"></i>
+            </div>
+            <h4>Library Blogs</h4>
+            <p>Stay updated with announcements, reviews and library news.</p>
+          </div>
+          <div class="about-feature">
+            <div class="about-feature-icon icon-pink">
+              <i class="fas fa-heart"></i>
+            </div>
+            <h4>Wishlist</h4>
+            <p>Save books you want to read next to your personal wishlist.</p>
+          </div>
+          <div class="about-feature">
+            <div class="about-feature-icon icon-teal">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h4>Admin Control</h4>
+            <p>Powerful admin tools to manage books, users and borrows.</p>
+          </div>
+        </div>
 
-          
-        
+        <div class="about-cta">
+          <h3>Ready to start reading?</h3>
+          <p>Join ReadON today and take control of your reading journey.</p>
+          <div class="cta-buttons">
+            <a href="register.html" class="btn-primary">
+              <i class="fas fa-user-plus"></i> Create Account
+            </a>
+            <a href="index.html" class="btn-secondary">
+              <i class="fas fa-home"></i> Back to Home
+            </a>
+          </div>
         </div>
       </div>
-    </section>
 
-    <special-footer></special-footer>
-    <script src="app.js"></script>
-  </body>
+    </div>
+  </div>
+
+  <div class="footer">
+    © 2026 ReadON. All rights reserved.
+  </div>
+
+</body>
+
 </html>
