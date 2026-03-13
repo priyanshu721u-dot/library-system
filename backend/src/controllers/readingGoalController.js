@@ -1,23 +1,33 @@
+const Borrow = require('../models/Borrow');
 const ReadingGoal = require('../models/ReadingGoal');
 const User = require('../models/User');
+
 
 const createGoal = async (req, res) => {
     try {
         const { targetHours, targetBooks, period, endDate } = req.body;
+
+        const student = await User.findById(req.user._id);
+        const completedBorrows = await Borrow.countDocuments({
+            student: req.user._id,
+            status: 'returned'
+        });
 
         const goal = await ReadingGoal.create({
             student: req.user._id,
             targetHours,
             targetBooks,
             period,
-            endDate
+            endDate,
+            startHours: student.totalReadingHours || 0,
+            startBooks: completedBorrows
         });
 
         res.status(201).json(goal);
     } catch (error) {
-        return res.status(500).json({ message: error.message })
+        return res.status(500).json({ message: error.message });
     }
-}
+};
 
 const getMyGoals = async (req, res) => {
     try {
@@ -29,7 +39,6 @@ const getMyGoals = async (req, res) => {
     }
 }
 
-const Borrow = require('../models/Borrow');
 
 const checkGoalProgress = async (req, res) => {
     try {
@@ -41,21 +50,39 @@ const checkGoalProgress = async (req, res) => {
         }
 
         const student = await User.findById(req.user._id);
-        const progressHours = student.totalReadingHours || 0;
+        const totalHours = student.totalReadingHours || 0;
+        const progressHours = Math.max(0, totalHours - (goal.startHours || 0));
 
-        // Count books completed (returned) since goal start
-        const completedBorrows = await Borrow.countDocuments({
+        // Count books completed via reading sessions since goal start
+        const ReadingSession = require('../models/ReadingSessions');
+        const sessions = await ReadingSession.find({
             student: req.user._id,
-            status: 'returned'
+            createdAt: { $gte: goal.createdAt }
+        }).populate('book', 'totalPages');
+
+        // Group by book, find books where currentPage >= totalPages
+        const bookMap = {};
+        sessions.forEach(s => {
+            if (!s.book) return;
+            const bookId = s.book._id.toString();
+            if (!bookMap[bookId] || s.currentPage > bookMap[bookId].currentPage) {
+                bookMap[bookId] = s;
+            }
         });
 
-        const hoursPercent = Math.min((progressHours / goal.targetHours) * 100, 100);
+        const currentBooks = Object.values(bookMap).filter(s =>
+            s.book.totalPages && s.currentPage >= s.book.totalPages
+        ).length;
+
+        const hoursPercent = goal.targetHours
+            ? Math.min(Math.round((progressHours / goal.targetHours) * 100), 100)
+            : 0;
         const booksPercent = goal.targetBooks
-            ? Math.min((completedBorrows / goal.targetBooks) * 100, 100)
+            ? Math.min(Math.round((currentBooks / goal.targetBooks) * 100), 100)
             : 0;
 
         const isCompleted = progressHours >= goal.targetHours &&
-            (!goal.targetBooks || completedBorrows >= goal.targetBooks);
+            (!goal.targetBooks || currentBooks >= goal.targetBooks);
 
         if (isCompleted && !goal.isCompleted) {
             goal.isCompleted = true;
@@ -65,9 +92,9 @@ const checkGoalProgress = async (req, res) => {
         res.json({
             goal,
             progressHours: Math.round(progressHours * 10) / 10,
-            progressPercentage: Math.round(hoursPercent),
-            currentBooks: completedBorrows,
-            booksPercentage: Math.round(booksPercent),
+            progressPercentage: hoursPercent,
+            currentBooks,
+            booksPercentage: booksPercent,
             isCompleted: goal.isCompleted
         });
     } catch (error) {

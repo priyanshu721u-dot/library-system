@@ -2,37 +2,46 @@ const mongoose = require('mongoose')
 
 
 const readingGoalSchema = new mongoose.Schema({
-    student:{
+    student: {
         type: mongoose.Schema.Types.ObjectId,
-        ref:'User',
-        required:true
+        ref: 'User',
+        required: true
     },
-    targetHours:{
-        type:Number,
-        required:[true , 'Target Hours is required'],
-        min:1
+    targetHours: {
+        type: Number,
+        required: [true, 'Target Hours is required'],
+        min: 1
     },
-    targetBooks:{
+    targetBooks: {
         type: Number,
         default: 0
     },
-    period:{
+    period: {
         type: String,
         enum: ['weekly', 'monthly', 'yearly'],
         required: false
     },
-    startDate:{
+    startDate: {
         type: Date,
         default: () => new Date()
     },
-    endDate:{
+    endDate: {
         type: Date,
-       required: false
+        required: false
     },
-    isCompleted:{
+    isCompleted: {
         type: Boolean,
         default: false
-    }
-},{timestamps:true})
+    },
+    startHours: {
+        type: Number,
+        default: 0
+    },
+    startBooks: {
+        type: Number,
+        default: 0
+    },
+    
+}, { timestamps: true })
 
 module.exports = mongoose.model('ReadingGoal', readingGoalSchema);

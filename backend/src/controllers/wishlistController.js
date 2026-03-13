@@ -33,23 +33,22 @@ const getMyWishlist = async (req , res) => {
     }
 }
 
-const removeFromWishlist = async (req , res ) => {
-    try{
-        const wishlist = await Wishlist.find({
-            student : req.user._id,
-            book:req.params.bookId
-        })
+const removeFromWishlist = async (req, res) => {
+    try {
+        const wishlist = await Wishlist.findOneAndDelete({
+            student: req.user._id,
+            book: req.params.bookId
+        });
 
-        if(!wishlist){
-        return res.status(404).json({ message: 'Book not found in wishlist' });
+        if (!wishlist) {
+            return res.status(404).json({ message: 'Book not found in wishlist' });
         }
 
-        await Wishlist.findByIdAndDelete(wishlist._id);
         res.json({ message: 'Book removed from wishlist' });
-            
-    }catch(error){
-         return res.status(500).json({message : error.message})
+
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
     }
-}
+};
 
 module.exports = { addToWishlist, getMyWishlist, removeFromWishlist };
