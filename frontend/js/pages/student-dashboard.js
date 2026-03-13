@@ -7,7 +7,9 @@ const user = getUser();
 // Set user info in sidebar
 document.getElementById('userName').textContent = user.username;
 document.getElementById('userAvatar').textContent = user.username.charAt(0).toUpperCase();
-
+// Call immediately at top
+loadAvatar();
+loadSidebarAvatar();
 // Set greeting
 function setGreeting() {
     const hour = new Date().getHours();
@@ -68,12 +70,12 @@ function getDueLabel(dueDateStr) {
 async function loadNotifications() {
     try {
         const res = await apiCall('/api/notifications/unread-count');
-        if (res.ok && res.data.count > 0) {
+        if (res.ok && res.data.unreadCount > 0) {
             const badge = document.getElementById('notifBadge');
-            badge.textContent = res.data.count;
+            badge.textContent = res.data.unreadCount;
             badge.style.display = 'flex';
         }
-    } catch (e) { }
+    } catch (e) {}
 }
 
 // Load stats
@@ -156,56 +158,77 @@ async function loadRecentActivity() {
     } catch (e) { }
 }
 
+
+const celebratedBooks = new Set();
+let goalCelebrated = false;
 // Load reading progress
 async function loadReadingProgress() {
     try {
         const res = await apiCall('/api/reading/my');
-        if (!res.ok) return;
-
-        if (res.data.length === 0) return;
-
-        const bookMap = {};
-        res.data.forEach(session => {
-            const bookId = session.book._id;
-            if (!bookMap[bookId]) {
-                bookMap[bookId] = session;
-            } else {
-                if (session.currentPage > bookMap[bookId].currentPage) {
-                    bookMap[bookId] = session;
-                }
-            }
-        });
-
-        // Filter out completed books (100%)
-        const sessions = Object.values(bookMap).filter(s => {
-            const percent = s.book.totalPages
-                ? Math.round((s.currentPage / s.book.totalPages) * 100)
-                : 0;
-            return percent < 100;
-        }).slice(0, 4);
-
-        if (sessions.length === 0) {
+        if (!res.ok || res.data.length === 0) {
             document.getElementById('progressList').innerHTML = `
                 <div class="empty-state">
-                    <i class="fas fa-check-circle" style="color:#16a34a;"></i>
-                    <p>All caught up! No books in progress.</p>
+                    <i class="fas fa-chart-line"></i>
+                    <p>No reading progress logged yet</p>
                 </div>`;
             return;
         }
 
+        const bookMap = {};
+        res.data.forEach(session => {
+            const bookId = session.book._id;
+            if (!bookMap[bookId] || session.currentPage > bookMap[bookId].currentPage) {
+                bookMap[bookId] = session;
+            }
+        });
+
+        const sessions = Object.values(bookMap).slice(0, 4);
+
+        // Check for newly completed books
+        sessions.forEach(s => {
+            if (s.book.totalPages && s.currentPage >= s.book.totalPages) {
+                if (!celebratedBooks.has(s.book._id)) {
+                    celebratedBooks.add(s.book._id);
+                    showCelebration(s.book.title);
+                }
+            }
+        });
+
         document.getElementById('progressList').innerHTML = sessions.map(s => {
-            const percent = s.book.totalPages
-                ? Math.min(Math.round((s.currentPage / s.book.totalPages) * 100), 100)
-                : 0;
+            const hasTotal = s.book.totalPages && s.book.totalPages > 0;
+            const rawPercent = hasTotal
+                ? Math.round((s.currentPage / s.book.totalPages) * 100)
+                : null;
+            const displayPercent = rawPercent !== null ? Math.min(rawPercent, 100) : null;
+            const isCompleted = rawPercent !== null && rawPercent >= 100;
+
             return `
                 <div class="progress-item">
                     <div class="progress-book-info">
-                        <div class="progress-book-title">${s.book.title}</div>
+                        <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.4rem;">
+                            <div class="progress-book-title">${s.book.title}</div>
+                            ${isCompleted ? `<span style="font-size:0.7rem; background:#f0fdf4;
+                                color:#16a34a; padding:2px 8px; border-radius:20px; font-weight:700;">
+                                ✓ Done</span>` : ''}
+                        </div>
                         <div class="progress-bar-wrapper">
-                            <div class="progress-bar-fill" style="width:${percent}%"></div>
+                            <div class="progress-bar-fill" style="width:${displayPercent || 0}%;
+                                background:${isCompleted
+                    ? 'linear-gradient(135deg,#16a34a,#22c55e)'
+                    : 'linear-gradient(135deg,#2563eb,#3b82f6)'};"></div>
                         </div>
                     </div>
-                    <div class="progress-percent">${percent}%</div>
+                    <div style="text-align:right; min-width:90px;">
+                        ${hasTotal
+                    ? `<div class="progress-percent" style="color:${isCompleted ? '#16a34a' : 'var(--primary-blue)'}">
+                                ${displayPercent}%</div>
+                               <div style="font-size:0.75rem; color:var(--text-gray); margin-top:2px;">
+                                ${s.currentPage} / ${s.book.totalPages} pg</div>`
+                    : `<div style="font-size:0.85rem; font-weight:700; color:var(--primary-blue);">
+                                ${s.currentPage} pg</div>
+                               <div style="font-size:0.75rem; color:var(--text-gray); margin-top:2px;">
+                                pages read</div>`}
+                    </div>
                 </div>
             `;
         }).join('');
@@ -266,7 +289,6 @@ async function loadWeeklyChart() {
 
 
 
-
 let goalChartInstance = null;
 
 async function loadGoal() {
@@ -277,6 +299,8 @@ async function loadGoal() {
             document.getElementById('goalChart').innerHTML = '';
             document.getElementById('goalInfo').innerHTML = `
                 <p style="color:var(--text-gray); font-size:0.9rem;">No reading goal set</p>`;
+            document.getElementById('setGoalBtn').textContent = 'Set Goal';
+            goalCelebrated = false;
             return;
         }
 
@@ -289,12 +313,11 @@ async function loadGoal() {
         const currentBooks = p.currentBooks || 0;
         const hoursPercent = p.progressPercentage || 0;
         const booksPercent = p.booksPercentage || 0;
-        const overallPercent = hoursPercent
-            ? Math.round((hoursPercent + booksPercent) / 2)
-            : hoursPercent;
+        const overallPercent = hoursPercent;
 
-        // Show celebration if goal just completed
-        if (p.isCompleted) {
+        // Show celebration only once
+        if (p.isCompleted && !goalCelebrated) {
+            goalCelebrated = true;
             showCelebration('🏆 Reading Goal Achieved!', true);
         }
 
@@ -306,7 +329,7 @@ async function loadGoal() {
         goalChartInstance = new ApexCharts(document.getElementById('goalChart'), {
             series: [overallPercent, 100 - overallPercent],
             chart: { type: 'donut', height: 220, toolbar: { show: false } },
-            colors: ['#ff9800', '#e2e8f0'],
+            colors: ['#ff4d00', '#e2e8f0'],
             fill: {
                 type: ['gradient', 'solid'],
                 gradient: {
@@ -347,6 +370,9 @@ async function loadGoal() {
             })
             : 'No deadline set';
 
+        // Update set goal button text
+        document.getElementById('setGoalBtn').textContent = 'Update Goal';
+
         document.getElementById('goalInfo').innerHTML = `
             <div style="margin-bottom:0.8rem;">
                 <div style="display:flex; justify-content:space-between; margin-bottom:0.4rem;">
@@ -367,32 +393,44 @@ async function loadGoal() {
                     <span style="font-size:0.78rem; color:var(--text-gray);">${goal.targetHours}h target</span>
                 </div>
             </div>
-            ${goal.targetBooks ? `
-            <div style="margin-bottom:0.8rem;">
-                <div style="display:flex; justify-content:space-between; margin-bottom:0.4rem;">
-                    <span style="font-size:0.85rem; font-weight:600; color:var(--text-dark);">
-                        Books Completed
-                    </span>
-                    <span style="font-size:0.85rem; font-weight:700; color:var(--primary-blue);">
-                        ${booksPercent}%
-                    </span>
+           
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.5rem;">
+                <div style="font-size:0.8rem; color:var(--text-gray);">
+                    <i class="fas fa-calendar"></i> Deadline: ${deadline}
                 </div>
-                <div style="height:7px; background:#e2e8f0; border-radius:50px; overflow:hidden;">
-                    <div style="height:100%; width:${booksPercent}%;
-                        background:var(--primary-blue);
-                        border-radius:50px; transition:width 0.5s ease;"></div>
-                </div>
-                <div style="display:flex; justify-content:space-between; margin-top:0.3rem;">
-                    <span style="font-size:0.78rem; color:var(--text-gray);">${currentBooks} done</span>
-                    <span style="font-size:0.78rem; color:var(--text-gray);">${goal.targetBooks} target</span>
-                </div>
-            </div>` : ''}
-            <div style="font-size:0.8rem; color:var(--text-gray); margin-top:0.5rem;">
-                <i class="fas fa-calendar"></i> Deadline: ${deadline}
+                <button onclick="resetGoal('${goal._id}')" style="font-size:0.78rem; color:#dc2626;
+                    background:none; border:none; cursor:pointer; font-family:'Inter',sans-serif;
+                    font-weight:600; padding:0;">
+                    <i class="fas fa-redo"></i> Reset
+                </button>
             </div>
         `;
 
-    } catch (e) {}
+    } catch (e) { }
+}
+
+async function resetGoal(goalId) {
+    if (!confirm('Reset this goal? This will delete it so you can start fresh.')) return;
+    try {
+        // Delete all goals
+        const allGoals = await apiCall('/api/goals/my');
+        if (allGoals.ok) {
+            await Promise.all(allGoals.data.map(g => apiCall(`/api/goals/${g._id}`, 'DELETE')));
+        }
+
+        goalCelebrated = false;
+        if (goalChartInstance) {
+            goalChartInstance.destroy();
+            goalChartInstance = null;
+        }
+        document.getElementById('goalChart').innerHTML = '';
+        document.getElementById('goalInfo').innerHTML = `
+            <p style="color:var(--text-gray); font-size:0.9rem;">No reading goal set</p>`;
+        document.getElementById('setGoalBtn').textContent = 'Set Goal';
+        showToast('Goal reset successfully!');
+    } catch (e) {
+        showToast('Failed to reset goal', 'error');
+    }
 }
 
 // Open set goal modal
@@ -435,7 +473,7 @@ document.getElementById('saveLogSession').addEventListener('click', async () => 
     const bookId = document.getElementById('sessionBook').value;
     const pagesRead = parseInt(document.getElementById('sessionPages').value);
     const duration = parseInt(document.getElementById('sessionDuration').value);
-    const currentPage = parseInt(document.getElementById('sessionCurrentPage').value) || 0;
+
 
     if (!bookId || !pagesRead || !duration) {
         showToast('Please fill in all required fields', 'error');
@@ -448,13 +486,13 @@ document.getElementById('saveLogSession').addEventListener('click', async () => 
 
     try {
         const res = await apiCall('/api/reading/log', 'POST', {
-            bookId, pagesRead, duration, currentPage
+            bookId, pagesRead, duration,
         });
 
         if (res.ok) {
             showToast('Reading session logged!');
             document.getElementById('logSessionOverlay').style.display = 'none';
-            ['sessionPages', 'sessionDuration', 'sessionCurrentPage']
+            ['sessionPages', 'sessionDuration']
                 .forEach(id => document.getElementById(id).value = '');
             document.getElementById('sessionBook').value = '';
 
@@ -478,7 +516,8 @@ document.getElementById('saveLogSession').addEventListener('click', async () => 
                 Object.values(bookMap).forEach(session => {
                     if (session.book.totalPages) {
                         const percent = Math.round((session.currentPage / session.book.totalPages) * 100);
-                        if (percent >= 100) {
+                        if (percent >= 100 && !celebratedBooks.has(session.book._id)) {
+                            celebratedBooks.add(session.book._id);
                             showCelebration(session.book.title);
                         }
                     }
@@ -579,6 +618,100 @@ function launchSparkles() {
 }
 
 // Init all
+// Pre-populate celebrated books on load
+apiCall('/api/reading/my').then(res => {
+    if (!res.ok) return;
+    const bookMap = {};
+    res.data.forEach(session => {
+        const bookId = session.book._id;
+        if (!bookMap[bookId] || session.currentPage > bookMap[bookId].currentPage) {
+            bookMap[bookId] = session;
+        }
+    });
+    Object.values(bookMap).forEach(session => {
+        if (session.book.totalPages) {
+            const percent = Math.round((session.currentPage / session.book.totalPages) * 100);
+            if (percent >= 100) celebratedBooks.add(session.book._id);
+        }
+    });
+});
+
+
+// Notification modal
+document.getElementById('notifIcon').addEventListener('click', async (e) => {
+    e.preventDefault();
+    document.getElementById('notifOverlay').style.display = 'flex';
+    await loadNotifications_modal();
+});
+
+document.getElementById('closeNotif').addEventListener('click', () => {
+    document.getElementById('notifOverlay').style.display = 'none';
+});
+
+document.getElementById('notifOverlay').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('notifOverlay'))
+        document.getElementById('notifOverlay').style.display = 'none';
+});
+
+const notifIconMap = {
+    borrow_approved: { icon: 'fa-check', cls: 'approved' },
+    borrow_rejected: { icon: 'fa-times', cls: 'rejected' },
+    borrow_pending: { icon: 'fa-clock', cls: 'pending' },
+    book_available: { icon: 'fa-book', cls: 'default' },
+    return_approved: { icon: 'fa-undo', cls: 'approved' },
+    overdue: { icon: 'fa-exclamation', cls: 'rejected' }
+};
+
+async function loadNotifications_modal() {
+    try {
+        const res = await apiCall('/api/notifications');
+        if (!res.ok) return;
+
+        const list = document.getElementById('notifList');
+
+        if (res.data.length === 0) {
+            list.innerHTML = `
+                <div class="empty-state" style="padding:2rem;">
+                    <i class="fas fa-bell"></i>
+                    <p>No notifications yet</p>
+                </div>`;
+            return;
+        }
+
+        list.innerHTML = res.data.map(n => {
+            const map = notifIconMap[n.type] || { icon: 'fa-bell', cls: 'default' };
+            const time = new Date(n.createdAt).toLocaleDateString('en-IN', {
+                day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
+            });
+            return `
+                <div class="notif-item ${n.read ? '' : 'unread'}" onclick="markRead('${n._id}', this)">
+                    <div class="notif-icon ${map.cls}">
+                        <i class="fas ${map.icon}"></i>
+                    </div>
+                    <div class="notif-content">
+                        <div class="notif-message">${n.message}</div>
+                        <div class="notif-time">${time}</div>
+                    </div>
+                    ${!n.read ? '<div class="notif-unread-dot"></div>' : ''}
+                </div>
+            `;
+        }).join('');
+
+        // Mark all as read after opening
+        await apiCall('/api/notifications/mark-all-read', 'PUT');
+        document.getElementById('notifBadge').style.display = 'none';
+
+    } catch (e) {}
+}
+
+async function markRead(id, el) {
+    try {
+        await apiCall(`/api/notifications/${id}/read`, 'PUT');
+        el.classList.remove('unread');
+        el.querySelector('.notif-unread-dot')?.remove();
+    } catch (e) {}
+}
+
 loadNotifications();
 loadStats();
 loadBorrowedBooks();

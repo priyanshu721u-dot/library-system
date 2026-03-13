@@ -4,7 +4,8 @@ requireAuth('admin');
 const user = getUser();
 document.getElementById('userName').textContent = user.username;
 document.getElementById('userAvatar').textContent = user.username.charAt(0).toUpperCase();
-
+loadAvatar();
+loadSidebarAvatar();
 // Sidebar toggle
 document.getElementById('sidebarToggle').addEventListener('click', () => {
     document.getElementById('sidebar').classList.toggle('open');
@@ -34,7 +35,7 @@ async function loadBooks() {
         if (!res.ok) return;
         allBooks = res.data;
         renderBooks();
-    } catch (e) {}
+    } catch (e) { }
 }
 
 // Render books
@@ -65,16 +66,12 @@ function renderBooks() {
     document.getElementById('booksTableBody').innerHTML = filtered.map(book => `
         <tr>
             <td>
-                ${book.coverImage
-                    ? `<img src="${book.coverImage}" class="book-cover-thumb" alt="cover"
-                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                       <div class="book-cover-thumb" style="display:none;">
-                           <i class="fas fa-book"></i>
-                       </div>`
-                    : `<div class="book-cover-thumb">
-                           <i class="fas fa-book"></i>
-                       </div>`
-                }
+               ${book.coverImage && !book.coverImage.includes('placeholder.com')
+            ? `<img src="${book.coverImage}" class="book-cover-thumb" alt="cover"
+        style="object-fit:cover;"
+        onerror="this.parentElement.innerHTML='<div class=\\'book-cover-thumb book-cover-fallback\\'>${book.title.charAt(0)}</div>'">`
+            : `<div class="book-cover-thumb book-cover-fallback">${book.title.charAt(0)}</div>`
+        }
             </td>
             <td>
                 <div style="font-weight:600; max-width:180px;">${book.title}</div>
@@ -107,6 +104,49 @@ function renderBooks() {
     `).join('');
 }
 
+function getBookCover(book) {
+    if (book.coverImage && !book.coverImage.includes('placeholder.com')) {
+        return `<img src="${book.coverImage}" alt="${book.title}" 
+            style="width:100%; height:100%; object-fit:cover; border-radius:inherit;"
+            onerror="this.parentElement.innerHTML='<div class=\\'book-cover-fallback\\'>${book.title.charAt(0)}</div>'">`;
+    }
+    return `<div class="book-cover-fallback">${book.title.charAt(0)}</div>`;
+}
+function previewBookCover(input, previewDivId, urlInputId) {
+    const file = input.files[0];
+    if (!file) return;
+
+    // Compress image using canvas
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            // Resize to max 200x280
+            const maxW = 200, maxH = 280;
+            let w = img.width, h = img.height;
+            if (w > maxW || h > maxH) {
+                const ratio = Math.min(maxW / w, maxH / h);
+                w = Math.round(w * ratio);
+                h = Math.round(h * ratio);
+            }
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, w, h);
+            // Compress to JPEG at 70% quality
+            const compressed = canvas.toDataURL('image/jpeg', 0.7);
+
+            const previewDiv = document.getElementById(previewDivId);
+            const previewImg = previewDiv.querySelector('img');
+            previewImg.src = compressed;
+            previewDiv.style.display = 'block';
+            document.getElementById(urlInputId).value = compressed;
+        };
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
 // Open add modal
 document.getElementById('openAddModal').addEventListener('click', () => {
     editingBookId = null;
@@ -119,8 +159,7 @@ document.getElementById('openAddModal').addEventListener('click', () => {
 // Open edit modal
 function openEditModal(bookId) {
     const book = allBooks.find(b => b._id === bookId);
-       console.log('Editing book ID:', bookId);
-    console.log('Found book:', book);
+
     if (!book) return;
 
     editingBookId = bookId;
@@ -133,7 +172,7 @@ function openEditModal(bookId) {
     document.getElementById('bookCategory').value = book.category || '';
     document.getElementById('bookTotalCopies').value = book.totalCopies || '';
     document.getElementById('bookTotalPages').value = book.totalPages || '';
-    
+
     document.getElementById('bookCoverImage').value = book.coverImage || '';
 
     document.getElementById('bookModalOverlay').style.display = 'flex';
@@ -142,7 +181,7 @@ function openEditModal(bookId) {
 // Clear form
 function clearBookForm() {
     ['bookTitle', 'bookAuthor', 'bookISBN', 'bookCategory',
-     'bookTotalCopies', 'bookTotalPages', 'bookDescription', 'bookCoverImage']
+        'bookTotalCopies', 'bookTotalPages', 'bookCoverImage']
         .forEach(id => document.getElementById(id).value = '');
 }
 
@@ -154,11 +193,15 @@ document.getElementById('saveBookBtn').addEventListener('click', async () => {
     const category = document.getElementById('bookCategory').value.trim();
     const totalCopies = parseInt(document.getElementById('bookTotalCopies').value);
     const totalPages = parseInt(document.getElementById('bookTotalPages').value) || 0;
-    const description = document.getElementById('bookDescription').value.trim();
+
     const coverImage = document.getElementById('bookCoverImage').value.trim();
 
     if (!title || !author || !ISBN || !category || !totalCopies) {
         showToast('Please fill in all required fields', 'error');
+        return;
+    }
+    if (!coverImage) {
+        showToast('Please add a cover image', 'error');
         return;
     }
 
@@ -171,14 +214,14 @@ document.getElementById('saveBookBtn').addEventListener('click', async () => {
         if (editingBookId) {
             res = await apiCall(`/api/books/${editingBookId}`, 'PUT', {
                 title, author, ISBN, category,
-                totalCopies, totalPages, description, coverImage
+                totalCopies, totalPages, coverImage
             });
         } else {
             res = await apiCall('/api/books', 'POST', {
                 title, author, ISBN, category,
                 totalCopies,
                 availableCopies: totalCopies,
-                totalPages, description, coverImage
+                totalPages, coverImage
             });
         }
 
@@ -203,7 +246,7 @@ document.getElementById('saveBookBtn').addEventListener('click', async () => {
 let deletingBookId = null;
 
 function openDeleteModal(bookId, bookTitle) {
-    
+
     deletingBookId = bookId;
     document.getElementById('deleteBookName').textContent = bookTitle;
     document.getElementById('deleteModalOverlay').style.display = 'flex';

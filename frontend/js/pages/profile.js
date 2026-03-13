@@ -4,7 +4,8 @@ requireAuth('student');
 const user = getUser();
 document.getElementById('userName').textContent = user.username;
 document.getElementById('userAvatar').textContent = user.username.charAt(0).toUpperCase();
-
+loadAvatar();
+loadSidebarAvatar();
 // Sidebar toggle
 document.getElementById('sidebarToggle').addEventListener('click', () => {
     document.getElementById('sidebar').classList.toggle('open');
@@ -24,6 +25,61 @@ function showToast(message, type = 'success') {
     setTimeout(() => toast.classList.remove('show'), 3000);
 }
 
+
+function uploadAvatar(input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const size = 200;
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            // Crop to square
+            const min = Math.min(img.width, img.height);
+            const sx = (img.width - min) / 2;
+            const sy = (img.height - min) / 2;
+            ctx.drawImage(img, sx, sy, min, min, 0, 0, size, size);
+            const compressed = canvas.toDataURL('image/jpeg', 0.8);
+
+            const userId = getUser()._id;
+            localStorage.setItem(`avatar_${userId}`, compressed);
+
+            const avatarEl = document.getElementById('profileAvatar');
+            avatarEl.innerHTML = `<img src="${compressed}" style="width:100%; height:100%;
+                object-fit:cover; border-radius:50%;">`;
+            document.getElementById('removeAvatarBtn').style.display = 'inline-block';
+
+            const sidebarAvatar = document.getElementById('userAvatar');
+            if (sidebarAvatar) {
+                sidebarAvatar.innerHTML = `<img src="${compressed}" style="width:100%; height:100%;
+                    object-fit:cover; border-radius:50%;">`;
+            }
+            showToast('Profile photo updated!');
+        };
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
+function removeAvatar() {
+    const userId = getUser()._id;
+    localStorage.removeItem(`avatar_${userId}`);
+
+    const user = getUser();
+    const initial = user.username.charAt(0).toUpperCase();
+    document.getElementById('profileAvatar').innerHTML = initial;
+    document.getElementById('removeAvatarBtn').style.display = 'none';
+
+    const sidebarAvatar = document.getElementById('userAvatar');
+    if (sidebarAvatar) sidebarAvatar.textContent = initial;
+
+    showToast('Profile photo removed');
+}
 // Load profile
 async function loadProfile() {
     try {
@@ -42,7 +98,7 @@ async function loadProfile() {
         // Pre-fill form
         document.getElementById('updateUsername').value = p.username;
         document.getElementById('updateEmail').value = p.email;
-
+        loadAvatar();
     } catch (e) {}
 }
 
@@ -189,5 +245,6 @@ document.getElementById('changePasswordBtn').addEventListener('click', async () 
 });
 
 // Init
+
 loadProfile();
 loadStats();

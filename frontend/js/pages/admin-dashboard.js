@@ -4,7 +4,8 @@ requireAuth('admin');
 const user = getUser();
 document.getElementById('userName').textContent = user.username;
 document.getElementById('userAvatar').textContent = user.username.charAt(0).toUpperCase();
-
+loadAvatar();
+loadSidebarAvatar();
 // Greeting
 function setGreeting() {
     const hour = new Date().getHours();
@@ -132,6 +133,10 @@ document.getElementById('qAddBookBtn').addEventListener('click', async () => {
         showToast('Please fill in all required fields', 'error');
         return;
     }
+    if (!coverImage) {
+        showToast('Please add a cover image', 'error');
+        return;
+    }
 
     const btn = document.getElementById('qAddBookBtn');
     btn.disabled = true;
@@ -164,6 +169,43 @@ document.getElementById('qAddBookBtn').addEventListener('click', async () => {
     }
 });
 
+function previewBookCover(input, previewDivId, urlInputId) {
+    const file = input.files[0];
+    if (!file) return;
+
+    // Compress image using canvas
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            // Resize to max 200x280
+            const maxW = 200, maxH = 280;
+            let w = img.width, h = img.height;
+            if (w > maxW || h > maxH) {
+                const ratio = Math.min(maxW / w, maxH / h);
+                w = Math.round(w * ratio);
+                h = Math.round(h * ratio);
+            }
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, w, h);
+            // Compress to JPEG at 70% quality
+            const compressed = canvas.toDataURL('image/jpeg', 0.7);
+
+            const previewDiv = document.getElementById(previewDivId);
+            const previewImg = previewDiv.querySelector('img');
+            previewImg.src = compressed;
+            previewDiv.style.display = 'block';
+            document.getElementById(urlInputId).value = compressed;
+        };
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
+
 // Load stats
 async function loadStats() {
     try {
@@ -173,8 +215,8 @@ async function loadStats() {
         document.getElementById('statStudents').textContent = s.totalStudents || 0;
         document.getElementById('statBooks').textContent = s.totalBooks || 0;
         document.getElementById('statBorrowed').textContent = s.activeBorrows || 0;
-        document.getElementById('statOverdue').textContent = s.pendingBorrows || 0;
-    } catch (e) {}
+        document.getElementById('statOverdue').textContent = s.returnRequests || 0;
+    } catch (e) { }
 }
 
 // Load pending borrows

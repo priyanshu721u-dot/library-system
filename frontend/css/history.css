@@ -1,3 +1,7 @@
+.main-content{
+     background-color: rgb(200, 216, 229);
+}
+
 /* Export button */
 .btn-export {
     display: flex;

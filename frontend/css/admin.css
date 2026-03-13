@@ -838,3 +838,26 @@
    margin: 10px; 
    
 }
+
+.book-cover-thumb {
+    width: 45px;
+    height: 60px;
+    border-radius: 6px;
+    overflow: hidden;
+    object-fit: cover;
+}
+
+.book-cover-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 800;
+    font-family: 'Inter', sans-serif;
+    text-transform: uppercase;
+    width: 45px;
+    height: 60px;
+    border-radius: 6px;
+}

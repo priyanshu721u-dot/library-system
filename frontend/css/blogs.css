@@ -359,3 +359,7 @@
         max-width: 100%;
     }
 }
+
+.main-content{
+     background-color: rgb(200, 216, 229);
+}

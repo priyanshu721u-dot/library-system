@@ -4,7 +4,8 @@ requireAuth('student');
 const user = getUser();
 document.getElementById('userName').textContent = user.username;
 document.getElementById('userAvatar').textContent = user.username.charAt(0).toUpperCase();
-
+loadAvatar();
+loadSidebarAvatar();
 // Sidebar toggle
 document.getElementById('sidebarToggle').addEventListener('click', () => {
     document.getElementById('sidebar').classList.toggle('open');
@@ -23,9 +24,12 @@ function showToast(message, type = 'success') {
     toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${message}`;
     setTimeout(() => toast.classList.remove('show'), 3000);
 }
+// Cart - persisted in localStorage
+let cart = JSON.parse(localStorage.getItem('readon_cart') || '[]');
 
-// Cart
-let cart = [];
+function saveCart() {
+    localStorage.setItem('readon_cart', JSON.stringify(cart));
+}
 
 function updateCartBadge() {
     const badge = document.getElementById('cartBadge');
@@ -51,12 +55,14 @@ function addToCart(book) {
         return;
     }
     cart.push(book);
+    saveCart();
     updateCartBadge();
     showToast(`"${book.title}" added to cart`);
 }
 
 function removeFromCart(bookId) {
     cart = cart.filter(b => b._id !== bookId);
+    saveCart();
     updateCartBadge();
     renderCartModal();
 }
@@ -66,7 +72,6 @@ function renderCartModal() {
     if (cart.length === 0) {
         cartList.innerHTML = `
             <div class="empty-state">
-                
                 <p>🛒 Your cart is empty</p>
             </div>`;
         return;
@@ -107,7 +112,7 @@ document.getElementById('borrowAllBtn').addEventListener('click', async () => {
     btn.innerHTML = '<div class="spinner"></div> Requesting...';
 
     let successCount = 0;
-    let failCount = 0;
+    let failMessages = [];
 
     for (const book of cart) {
         try {
@@ -115,27 +120,31 @@ document.getElementById('borrowAllBtn').addEventListener('click', async () => {
             if (res.ok) {
                 successCount++;
             } else {
-                failCount++;
+                failMessages.push(res.data?.message || `Failed to request "${book.title}"`);
             }
         } catch (e) {
-            failCount++;
+            failMessages.push(`Failed to request "${book.title}"`);
         }
     }
 
     cart = [];
+    saveCart();
     updateCartBadge();
     document.getElementById('cartModal').style.display = 'none';
 
-    if (successCount > 0) {
-        showToast(`${successCount} book(s) requested successfully!`);
-    }
-    if (failCount > 0) {
-        showToast(`${failCount} book(s) failed to request`, 'error');
-    }
+    if (successCount > 0) showToast(`${successCount} book(s) requested successfully!`);
+    
+    // Show each error message separately
+    failMessages.forEach((msg, i) => {
+        setTimeout(() => showToast(msg, 'error'), (i + 1) * 1000);
+    });
 
     btn.disabled = false;
     btn.innerHTML = '<i class="fas fa-check"></i> Request All Books';
 });
+
+// Init cart badge on load
+updateCartBadge();
 
 // Wishlist
 async function toggleWishlist(book, btn) {
@@ -144,13 +153,10 @@ async function toggleWishlist(book, btn) {
         if (res.ok) {
             showToast(`"${book.title}" added to wishlist`);
             btn.style.color = '#ef4444';
+        } else if (res.status === 400) {
+            showToast(`"${book.title}" is already in your wishlist`, 'error');
         } else {
-            // Try delete
-            const delRes = await apiCall(`/api/wishlist/${book._id}`, 'DELETE');
-            if (delRes.ok) {
-                showToast(`"${book.title}" removed from wishlist`);
-                btn.style.color = '';
-            }
+            showToast('Failed to add to wishlist', 'error');
         }
     } catch (e) {
         showToast('Failed to update wishlist', 'error');
@@ -162,30 +168,79 @@ document.getElementById('wishlistIcon').addEventListener('click', async (e) => {
     e.preventDefault();
     const res = await apiCall('/api/wishlist/my');
     const wishlistList = document.getElementById('wishlistList');
+    const items = res.data?.wishlist || [];
 
-    if (!res.ok || res.data.length === 0) {
+    if (!res.ok || items.length === 0) {
         wishlistList.innerHTML = `
             <div class="empty-state">
                 <i class="fas fa-heart"></i>
                 <p>Your wishlist is empty</p>
             </div>`;
     } else {
-        wishlistList.innerHTML = res.data.map(item => `
-            <div class="cart-item">
-                <div class="cart-item-info">
-                    <div class="cart-item-title">${item.book.title}</div>
-                    <div class="cart-item-author">${item.book.author}</div>
-                </div>
-                <span class="availability-badge ${item.book.availableCopies > 0 ? 'badge-available' : 'badge-out'}">
-                    ${item.book.availableCopies > 0 ? 'Available' : 'Out of Stock'}
-                </span>
-            </div>
-        `).join('');
+        wishlistList.innerHTML = items.map(item => `
+    <div class="cart-item" id="wishlist-${item.book._id}">
+        <div class="cart-item-info">
+            <div class="cart-item-title">${item.book.title}</div>
+            <div class="cart-item-author">${item.book.author}</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:0.8rem;">
+            <span class="availability-badge ${item.book.availableCopies > 0 ? 'badge-available' : 'badge-out'}">
+                ${item.book.availableCopies > 0 ? 'Available' : 'Out of Stock'}
+            </span>
+            <button onclick="removeFromWishlist('${item.book._id}')" 
+                style="background:none; border:none; cursor:pointer; color:#dc2626; font-size:1.1rem;">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+    </div>
+`).join('');
     }
 
     document.getElementById('wishlistModal').style.display = 'flex';
 });
 
+async function removeFromWishlist(bookId) {
+    try {
+        const res = await apiCall(`/api/wishlist/${bookId}`, 'DELETE');
+        if (res.ok) {
+            showToast('Removed from wishlist');
+            // Reload wishlist from API
+            const fresh = await apiCall('/api/wishlist/my');
+            const items = fresh.data?.wishlist || [];
+            const wishlistList = document.getElementById('wishlistList');
+
+            if (items.length === 0) {
+                wishlistList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-heart"></i>
+                        <p>Your wishlist is empty</p>
+                    </div>`;
+            } else {
+                wishlistList.innerHTML = items.map(item => `
+                    <div class="cart-item" id="wishlist-${item.book._id}">
+                        <div class="cart-item-info">
+                            <div class="cart-item-title">${item.book.title}</div>
+                            <div class="cart-item-author">${item.book.author}</div>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:0.8rem;">
+                            <span class="availability-badge ${item.book.availableCopies > 0 ? 'badge-available' : 'badge-out'}">
+                                ${item.book.availableCopies > 0 ? 'Available' : 'Out of Stock'}
+                            </span>
+                            <button onclick="removeFromWishlist('${item.book._id}')"
+                                style="background:none; border:none; cursor:pointer; color:#dc2626; font-size:1.1rem;">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        } else {
+            showToast('Failed to remove', 'error');
+        }
+    } catch (e) {
+        showToast('Failed to remove', 'error');
+    }
+}
 document.getElementById('closeWishlist').addEventListener('click', () => {
     document.getElementById('wishlistModal').style.display = 'none';
 });
@@ -226,8 +281,8 @@ function renderBooks(books) {
             <div class="book-cover">
                 ${book.isNew ? '<span class="badge-new">NEW</span>' : ''}
                 ${book.coverImage
-                    ? `<img src="${book.coverImage}" alt="${book.title}">`
-                    : `<i class="fas fa-book"></i>`}
+            ? `<img src="${book.coverImage}" alt="${book.title}">`
+            : `<i class="fas fa-book"></i>`}
                 <div class="book-actions">
                     <button class="book-action-btn cart" onclick="addToCart(${JSON.stringify(book).replace(/"/g, '&quot;')})" title="Add to Cart">
                         <i class="fas fa-cart-plus"></i>
@@ -265,8 +320,8 @@ function renderTrending(books) {
         <div class="trending-book-card">
             <div class="trending-book-cover">
                 ${book.coverImage
-                    ? `<img src="${book.coverImage}" alt="${book.title}">`
-                    : `<i class="fas fa-book"></i>`}
+            ? `<img src="${book.coverImage}" alt="${book.title}">`
+            : `<i class="fas fa-book"></i>`}
             </div>
             <div class="trending-book-title">${book.title}</div>
             <div class="trending-book-author">${book.author}</div>

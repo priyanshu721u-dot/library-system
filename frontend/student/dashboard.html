@@ -252,13 +252,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label>Current Page</label>
-                    <div class="input-wrapper">
-                        <i class="fas fa-bookmark"></i>
-                        <input type="number" id="sessionCurrentPage" placeholder="e.g. 120" min="1">
-                    </div>
-                </div>
+               
             </div>
             <div class="modal-footer">
                 <button class="btn-cancel" id="cancelLogSession">Cancel</button>
@@ -287,10 +281,10 @@
                     </div>
                     <div class="form-group">
                         <label>Target Hours</label>
-                        <div class="input-wrapper">
+                        <!-- <div class="input-wrapper">
                             <i class="fas fa-clock"></i>
                             <input type="number" id="goalHours" placeholder="e.g. 50" min="1">
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="form-group">
@@ -331,6 +325,22 @@
             </button>
         </div>
     </div>
+
+    <!-- NOTIFICATION MODAL -->
+<div class="modal-overlay" id="notifOverlay" style="display:none;">
+    <div class="modal" style="max-width:480px;">
+        <div class="modal-header">
+            <h3><i class="fas fa-bell" style="color:var(--primary-blue);"></i> Notifications</h3>
+            <button class="modal-close" id="closeNotif"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body" style="padding:5px;" id="notifList">
+            <div class="empty-state" style="padding:2rem;">
+                <i class="fas fa-bell"></i>
+                <p>No notifications</p>
+            </div>
+        </div>
+    </div>
+</div>
     <div class="toast" id="toast"></div>
     <script src="../js/auth.js"></script>
     <script src="../js/api.js"></script>

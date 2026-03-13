@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,8 +11,10 @@
     <link rel="stylesheet" href="../css/dashboard.css">
     <link rel="stylesheet" href="../css/admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
 </head>
+
 <body class="dashboard-body">
 
     <aside class="sidebar" id="sidebar">
@@ -134,8 +137,26 @@
                     <textarea id="blogContent" rows="6" placeholder="Write your blog content..."></textarea>
                 </div>
                 <div class="admin-form-group">
-                    <label>Cover Image URL</label>
-                    <input type="text" id="blogCoverImage" placeholder="https://...">
+                    <label>Cover Image</label>
+                    <div style="display:flex; flex-direction:column; gap:0.5rem;">
+                        <input type="text" id="blogCoverImage" placeholder="Paste image URL...">
+                        <div style="display:flex; align-items:center; gap:0.5rem;">
+                            <span style="font-size:0.8rem; color:var(--text-gray);">or</span>
+                        </div>
+                        <label for="blogCoverFile" style="display:flex; align-items:center; gap:0.5rem;
+            padding:0.7rem 1rem; border:2px dashed #e2e8f0; border-radius:10px;
+            cursor:pointer; font-size:0.88rem; color:var(--text-gray); transition:all 0.3s ease;"
+                            onmouseover="this.style.borderColor='var(--primary-blue)'; this.style.color='var(--primary-blue)'"
+                            onmouseout="this.style.borderColor='#e2e8f0'; this.style.color='var(--text-gray)'">
+                            <i class="fas fa-upload"></i> Choose file from computer
+                            <input type="file" id="blogCoverFile" accept="image/*" style="display:none;"
+                                onchange="previewBookCover(this, 'blogCoverPreview', 'blogCoverImage')">
+                        </label>
+                        <div id="blogCoverPreview" style="display:none; margin-top:0.5rem;">
+                            <img id="blogCoverPreviewImg" src="" alt="preview"
+                                style="width:80px; height:50px; object-fit:cover; border-radius:8px; border:2px solid #e2e8f0;">
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -191,4 +212,5 @@
     <script src="../js/api.js"></script>
     <script src="../js/pages/admin-blogs.js"></script>
 </body>
+
 </html>

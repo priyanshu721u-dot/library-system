@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,9 +11,11 @@
     <link rel="stylesheet" href="../css/dashboard.css">
     <link rel="stylesheet" href="../css/admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </head>
+
 <body class="dashboard-body">
 
     <aside class="sidebar" id="sidebar">
@@ -110,10 +113,10 @@
                     </div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon purple"><i class="fas fa-exclamation-triangle"></i></div>
+                    <div class="stat-icon purple"><i class="fas fa-undo"></i></div>
                     <div class="stat-info">
                         <h3 id="statOverdue">0</h3>
-                        <p>Overdue Books</p>
+                        <p>Return Requests</p>
                     </div>
                 </div>
             </div>
@@ -192,8 +195,21 @@
                     <input type="text" id="qBlogTitle" placeholder="Enter blog title">
                     <label>Content *</label>
                     <textarea id="qBlogContent" rows="5" placeholder="Write your blog..."></textarea>
-                    <label>Cover Image URL</label>
-                    <input type="text" id="qBlogCover" placeholder="https://...">
+                    <label>Cover Image *</label>
+                    <input type="text" id="qBlogCover" placeholder="Paste image URL...">
+                    <label for="qBlogCoverFile" style="display:flex; align-items:center; gap:0.5rem;
+    padding:0.6rem 1rem; border:2px dashed #e2e8f0; border-radius:10px;
+    cursor:pointer; font-size:0.85rem; color:var(--text-gray); margin-top:0.4rem;"
+                        onmouseover="this.style.borderColor='var(--primary-blue)'"
+                        onmouseout="this.style.borderColor='#e2e8f0'">
+                        <i class="fas fa-upload"></i> Choose file from computer
+                        <input type="file" id="qBlogCoverFile" accept="image/*" style="display:none;"
+                            onchange="previewBookCover(this, 'qBlogCoverPreview', 'qBlogCover')">
+                    </label>
+                    <div id="qBlogCoverPreview" style="display:none; margin-top:0.4rem;">
+                        <img id="qBlogCoverPreviewImg" src="" alt="preview"
+                            style="width:80px; height:50px; object-fit:cover; border-radius:6px; border:2px solid #e2e8f0;">
+                    </div>
                     <button class="submit-btn" id="qAddBlogBtn">
                         <i class="fas fa-paper-plane"></i> Publish Blog
                     </button>
@@ -229,8 +245,21 @@
                             <input type="number" id="qBookPages" placeholder="Pages">
                         </div>
                     </div>
-                    <label>Cover Image URL</label>
-                    <input type="text" id="qBookCover" placeholder="https://...">
+                    <label>Cover Image</label>
+                    <input type="text" id="qBookCover" placeholder="Paste image URL...">
+                    <label for="qBookCoverFile" style="display:flex; align-items:center; gap:0.5rem;
+                        padding:0.6rem 1rem; border:2px dashed #e2e8f0; border-radius:10px;
+                        cursor:pointer; font-size:0.85rem; color:var(--text-gray); margin-top:0.4rem;"
+                        onmouseover="this.style.borderColor='var(--primary-blue)'"
+                        onmouseout="this.style.borderColor='#e2e8f0'">
+                        <i class="fas fa-upload"></i> Choose file from computer
+                        <input type="file" id="qBookCoverFile" accept="image/*" style="display:none;"
+                            onchange="previewBookCover(this, 'qBookCoverPreview', 'qBookCover')">
+                    </label>
+                    <div id="qBookCoverPreview" style="display:none; margin-top:0.4rem;">
+                        <img id="qBookCoverPreviewImg" src="" alt="preview"
+                            style="width:50px; height:70px; object-fit:cover; border-radius:6px; border:2px solid #e2e8f0;">
+                    </div>
                     <button class="submit-btn" id="qAddBookBtn">
                         <i class="fas fa-plus"></i> Add Book
                     </button>
@@ -302,4 +331,5 @@
     <script src="../js/api.js"></script>
     <script src="../js/pages/admin-dashboard.js"></script>
 </body>
+
 </html>

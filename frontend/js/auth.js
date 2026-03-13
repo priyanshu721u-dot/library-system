@@ -8,7 +8,31 @@ function getUser() {
     const user = localStorage.getItem('user');
     return user ? JSON.parse(user) : null;
 }
+function loadSidebarAvatar() {
+    const user = getUser();
+    if (!user) return;
+    const saved = localStorage.getItem(`avatar_${user._id}`);
+    const sidebarAvatar = document.getElementById('userAvatar');
+    if (saved && sidebarAvatar) {
+        sidebarAvatar.innerHTML = `<img src="${saved}" style="width:100%; height:100%;
+            object-fit:cover; border-radius:50%;">`;
+    }
+}
 
+function loadAvatar() {
+    const user = getUser();
+    if (!user) return;
+    const saved = localStorage.getItem(`avatar_${user._id}`);
+    const avatarEl = document.getElementById('profileAvatar');
+    const removeBtn = document.getElementById('removeAvatarBtn');
+    if (!avatarEl) return;
+
+    if (saved) {
+        avatarEl.innerHTML = `<img src="${saved}" style="width:100%; height:100%;
+            object-fit:cover; border-radius:50%;">`;
+        if (removeBtn) removeBtn.style.display = 'inline-block';
+    }
+}
 // ===== CHECK IF LOGGED IN =====
 function isLoggedIn() {
     return !!getToken();
