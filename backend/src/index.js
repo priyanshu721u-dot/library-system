@@ -1,5 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
+dotenv.config();
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const bookRoutes = require('./routes/bookRoutes');
@@ -21,7 +22,6 @@ app.use(cors({
     credentials: true
 }));
 
-dotenv.config();
 
 connectDB();
 
