@@ -1,5 +1,5 @@
 // toggle pass
-document.getElementById('togglePassword').addEventListener('click', function() {
+document.getElementById('togglePassword').addEventListener('click', function () {
     const password = document.getElementById('password');
     if (password.type === 'password') {
         password.type = 'text';
@@ -10,7 +10,7 @@ document.getElementById('togglePassword').addEventListener('click', function() {
     }
 });
 
-document.getElementById('toggleConfirmPassword').addEventListener('click', function() {
+document.getElementById('toggleConfirmPassword').addEventListener('click', function () {
     const confirmPassword = document.getElementById('confirmPassword');
     if (confirmPassword.type === 'password') {
         confirmPassword.type = 'text';
@@ -77,10 +77,10 @@ document.getElementById('registerBtn').addEventListener('click', async () => {
     btn.innerHTML = '<div class="spinner"></div> Creating account...';
 
     try {
-        const response = await fetch('http://localhost:5001/api/auth/register', {
+        const response = await fetch('https://readon-api.onrender.com/api/auth/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, email, password, role: 'student' })
+            body: JSON.stringify({ username, email, password })
         });
 
         const data = await response.json();
