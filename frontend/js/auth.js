@@ -80,8 +80,9 @@ async function apiCall(endpoint, method = 'GET', body = null) {
     if (body) {
         options.body = JSON.stringify(body);
     }
-
-    const response = await fetch(`http://localhost:5001${endpoint}`, options);
+    
+    const BASE_URL = 'https://readon-api.onrender.com';
+    const response = await fetch(`${BASE_URL}${endpoint}`, options);
     const data = await response.json();
 
     if (response.status === 401) {
